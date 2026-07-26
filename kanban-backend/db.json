@@ -1,0 +1,140 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Sofiia",
+      "color": "#7c5cff"
+    },
+    {
+      "id": 2,
+      "name": "Marta",
+      "color": "#3ddc84"
+    },
+    {
+      "id": 3,
+      "name": "Andrii",
+      "color": "#ff9f5a"
+    },
+    {
+      "id": 4,
+      "name": "Olena",
+      "color": "#61dafb"
+    }
+  ],
+  "columns": [
+    {
+      "id": 1,
+      "title": "To Do",
+      "order": 1,
+      "limit": 5
+    },
+    {
+      "id": 2,
+      "title": "In Progress",
+      "order": 2,
+      "limit": 3
+    },
+    {
+      "id": 3,
+      "title": "Done",
+      "order": 3,
+      "limit": null
+    }
+  ],
+  "cards": [
+    {
+      "id": 1,
+      "title": "Set up the project",
+      "description": "Create a Vite + React + TypeScript app and install dependencies.",
+      "columnId": 1,
+      "order": 1,
+      "assigneeId": 1,
+      "checklist": [
+        {
+          "id": 1,
+          "text": "Create Vite app",
+          "done": true
+        },
+        {
+          "id": 2,
+          "text": "Add TypeScript template",
+          "done": true
+        },
+        {
+          "id": 3,
+          "text": "Install dependencies",
+          "done": false
+        }
+      ],
+      "createdAt": "2026-07-20T09:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "title": "Design the board layout",
+      "description": "Columns with cards, drag-and-drop between columns.",
+      "columnId": 1,
+      "order": 2,
+      "assigneeId": 2,
+      "createdAt": "2026-07-20T09:10:00.000Z"
+    },
+    {
+      "id": 3,
+      "title": "Build the login screen",
+      "description": "Pick a user and store the current user globally.",
+      "columnId": 1,
+      "order": 3,
+      "assigneeId": null,
+      "createdAt": "2026-07-20T09:20:00.000Z"
+    },
+    {
+      "id": 4,
+      "title": "Connect the API",
+      "description": "GET / POST / PATCH / DELETE cards from json-server.",
+      "columnId": 2,
+      "order": 1,
+      "assigneeId": 1,
+      "checklist": [
+        {
+          "id": 1,
+          "text": "getCards()",
+          "done": true
+        },
+        {
+          "id": 2,
+          "text": "createCard()",
+          "done": false
+        },
+        {
+          "id": 3,
+          "text": "updateCard()",
+          "done": false
+        },
+        {
+          "id": 4,
+          "text": "deleteCard()",
+          "done": false
+        }
+      ],
+      "createdAt": "2026-07-20T10:00:00.000Z"
+    },
+    {
+      "id": 5,
+      "title": "Card modal with validation",
+      "description": "Create and edit a card using react-hook-form + zod.",
+      "columnId": 2,
+      "order": 2,
+      "assigneeId": 3,
+      "checklist": [],
+      "createdAt": "2026-07-20T10:30:00.000Z"
+    },
+    {
+      "id": 6,
+      "title": "Read the homework brief",
+      "description": "Understand the requirements before coding.",
+      "columnId": 3,
+      "order": 1,
+      "assigneeId": 4,
+      "createdAt": "2026-07-19T18:00:00.000Z"
+    }
+  ]
+}
