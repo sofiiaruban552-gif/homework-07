@@ -1,0 +1,30 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family);
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 1400px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+
+  margin: 0 auto;
+  padding: var(--space-5);
+  min-height: 100vh;
+}

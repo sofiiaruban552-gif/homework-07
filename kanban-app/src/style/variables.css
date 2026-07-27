@@ -1,0 +1,78 @@
+:root {
+  /* Backgrounds */
+  --color-bg: #0f1117;
+  --color-surface: #1a1d27;
+  --color-surface-hover: #222634;
+  --color-card: #232736;
+  --color-card-hover: #2b3041;
+
+  /* Borders */
+  --color-border: #30354a;
+  --color-border-light: #3b4158;
+  --color-border-dashed: #3a4156;
+
+  /* Primary */
+  --color-primary: #7c5cff;
+  --color-primary-hover: #6f52ea;
+  --color-primary-light: #a58cff;
+
+  /* Status */
+  --color-success: #42d77d;
+  --color-warning: #ff9d4d;
+  --color-danger: #ff5d73;
+  --color-info: #5fd3ff;
+
+  /* Text */
+  --color-text: #f4f5f7;
+  --color-text-secondary: #a4a8b8;
+  --color-text-muted: #72798d;
+  --color-text-disabled: #585e70;
+
+  /* Avatars */
+  --avatar-purple: #7c5cff;
+  --avatar-green: #42d77d;
+  --avatar-orange: #ff9d4d;
+  --avatar-blue: #5fd3ff;
+  --avatar-gray: #4b5267;
+
+  /* Progress */
+  --progress-bg: #34384b;
+  --progress-success: #42d77d;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.3);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-round: 999px;
+
+  /* Spacing */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+
+  /* Typography */
+  --font-family: Inter, system-ui, sans-serif;
+
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 20px;
+  --text-xl: 24px;
+
+  --font-regular: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+
+  /* Transitions */
+  --transition: 0.2s ease;
+}
