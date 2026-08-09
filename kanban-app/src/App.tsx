@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router";
+import { Route, Routes } from "react-router";
 import "./App.css";
 
 import BoardPage from "./components/pages/BoardPage/BoardPage";
@@ -21,8 +21,6 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-
-        <Route path="*" element={<Navigate to={ROUTES.BOARD} replace />} />
       </Routes>
     </div>
   );

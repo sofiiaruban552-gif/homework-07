@@ -1,4 +1,10 @@
 :root {
+  --z-modal: 1000;
+
+  --overlay: rgba(15, 17, 23, 0.75);
+
+  --modal-width: 640px;
+  
   /* Backgrounds */
   --color-bg: #0f1117;
   --color-surface: #1a1d27;
@@ -75,4 +81,7 @@
 
   /* Transitions */
   --transition: 0.2s ease;
+
+  --focus-ring-primary: rgba(124, 92, 255, 0.15);
+  --focus-ring-danger: rgba(255, 93, 115, 0.15);
 }

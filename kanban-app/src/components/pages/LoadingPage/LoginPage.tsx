@@ -1,49 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Surface from "@/components/shared/Surface";
-import clsx from "clsx";
-
-const users = [
-  { id: "sofiia", name: "Sofiia", color: "var(--avatar-purple)" },
-  { id: "marta", name: "Marta", color: "var(--avatar-green)" },
-  { id: "andrii", name: "Andrii", color: "var(--avatar-orange)" },
-  { id: "olena", name: "Olena", color: "var(--avatar-blue)" },
-];
+import UserCard from "./UserCard";
+import useAuthStore from "@/store/useAuthStore";
+import useUsersStore from "@/store/useUsersStore";
+import { ROUTES } from "@/types/routes";
 
 const LoginPage = () => {
-  const [selectedUser, setSelectedUser] = useState(users[0].id);
+  const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
+
+  const { users, loading, fetchUsers } = useUsersStore();
+
+  useEffect(() => {
+    if (users.length === 0) {
+      fetchUsers();
+    }
+  }, [users.length, fetchUsers]);
+
+  const [selectedUser, setSelectedUser] = useState<number | null>(null);
+
+  const handleSelectUser = (id: number) => {
+    setSelectedUser(id);
+
+    const user = users.find((user) => user.id === id);
+
+    if (user) {
+      login(user);
+      navigate(ROUTES.BOARD);
+    }
+  };
+  
+  if (loading) {
+    return (
+        <p>Loading board...</p>
+    );
+  }
 
   return (
     <Surface>
       <h1>Who are you?</h1>
       <p>Select a user to continue</p>
+
       <div className="user-selector__grid">
         {users.map((user) => (
-          <label
+          <UserCard
             key={user.id}
-            htmlFor={user.id}
-            className={clsx("user-card", {
-              "user-card--selected": selectedUser === user.id,
-            })}
-          >
-            <input
-              id={user.id}
-              className="user-card__input"
-              type="radio"
-              name="user"
-              value={user.id}
-              checked={selectedUser === user.id}
-              onChange={(e) => setSelectedUser(e.target.value)}
-            />
-
-            <div
-              className="user-card__avatar"
-              style={{ backgroundColor: user.color }}
-            >
-              {user.name[0]}
-            </div>
-
-            <span className="user-card__name">{user.name}</span>
-          </label>
+            id={user.id}
+            name={user.name}
+            color={user.color}
+            checked={selectedUser === user.id}
+            onChange={handleSelectUser}
+          />
         ))}
       </div>
     </Surface>
