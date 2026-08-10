@@ -131,7 +131,7 @@
       "id": 6,
       "title": "Read the homework brief",
       "description": "Understand the requirements before coding.",
-      "columnId": 3,
+      "columnId": 2,
       "order": 1,
       "assigneeId": 4,
       "createdAt": "2026-07-19T18:00:00.000Z"
@@ -150,6 +150,31 @@
         }
       ],
       "id": 7
+    },
+    {
+      "title": "test 1",
+      "description": "test jjjj",
+      "columnId": 1,
+      "order": 1,
+      "assigneeId": 2,
+      "checklist": [
+        {
+          "id": 1786345917074,
+          "text": "sss",
+          "done": false
+        },
+        {
+          "id": 1786346077732,
+          "text": "fff",
+          "done": false
+        },
+        {
+          "id": 1786346298732,
+          "text": "kkk",
+          "done": false
+        }
+      ],
+      "id": 8
     }
   ]
 }

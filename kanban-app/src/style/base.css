@@ -109,6 +109,7 @@ body {
 
 .button--secondary:hover:not(:disabled) {
   background: var(--color-card-hover);
+  border-color: var(--color-primary);
 }
 
 .button--dashed {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import type { MouseEvent, PointerEvent } from "react";
 import type { Card, User } from "@/types";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
@@ -6,6 +6,7 @@ import { Pencil } from "lucide-react";
 
 import CardModal from "@/components/shared/CardModal";
 import Button from "@/components/shared/Button";
+import useModal from "@/hooks/useModal";
 
 interface BoardCardProps {
   id: number;
@@ -14,24 +15,20 @@ interface BoardCardProps {
 }
 
 const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
-  const [isCardModalOpen, setIsCardModalOpen] = useState(false);
+  const { isOpen, open, close } = useModal();
 
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: String(id),
     });
 
-  const handleOpenEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    setIsCardModalOpen(true);
+  const handleOpenEdit = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    open();
   };
 
-  const handleEditPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-  };
-
-  const handleCloseCardModal = () => {
-    setIsCardModalOpen(false);
+  const handleEditPointerDown = (event: PointerEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
   };
 
   const style = {
@@ -72,7 +69,9 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
           {assignee && (
             <div
               className="card__avatar"
-              style={{ backgroundColor: assignee.color }}
+              style={{
+                backgroundColor: assignee.color,
+              }}
               title={assignee.name}
             >
               {assignee.name[0]}
@@ -81,12 +80,7 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
         </footer>
       </article>
 
-      <CardModal
-        id={id}
-        open={isCardModalOpen}
-        onClose={handleCloseCardModal}
-        isEdit
-      />
+      <CardModal id={id} open={isOpen} onClose={close} isEdit />
     </>
   );
 };

@@ -1,6 +1,25 @@
 import { create } from "zustand";
+
 import { getUsers } from "@/api";
 import type { User } from "@/types";
+
+export interface AssigneeOption {
+  value: string;
+  label: string;
+}
+
+export const getAssigneeOptions = (
+  users: User[],
+): AssigneeOption[] => [
+  {
+    value: "",
+    label: "Select assignee",
+  },
+  ...users.map((user) => ({
+    value: String(user.id),
+    label: user.name,
+  })),
+];
 
 interface UsersStore {
   users: User[];
@@ -17,11 +36,9 @@ const useUsersStore = create<UsersStore>((set, get) => ({
   error: null,
 
   fetchUsers: async () => {
-    if (get().users.length > 0) {
-      return;
-    }
+    const { users, loading } = get();
 
-    if (get().loading) {
+    if (users.length > 0 || loading) {
       return;
     }
 
@@ -51,3 +68,4 @@ const useUsersStore = create<UsersStore>((set, get) => ({
 }));
 
 export default useUsersStore;
+

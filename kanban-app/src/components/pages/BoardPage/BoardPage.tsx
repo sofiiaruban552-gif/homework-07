@@ -26,12 +26,10 @@ const BoardPage = () => {
     moveCard(cardId, toColumn); 
   };
 
-  useEffect(() => {
-    if (users.length === 0) {
-      fetchUsers();
-    }
-    fetchBoard();
-  }, [users.length, fetchUsers, fetchBoard]);
+ useEffect(() => {
+   fetchBoard();
+   fetchUsers();
+ }, [fetchBoard, fetchUsers]);
 
   if (!currentUser) {
     return <Navigate to={ROUTES.LOGIN} replace />;
