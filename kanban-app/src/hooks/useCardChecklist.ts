@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import type { ChecklistItem } from "@/components/shared/Checklist";
 
@@ -11,18 +11,24 @@ const useCardChecklist = ({
 }: UseCardChecklistProps = {}) => {
   const [items, setItems] = useState<ChecklistItem[]>(initialItems);
 
-  const addItem = (text: string) => {
+  const addItem = useCallback((text: string) => {
+    const trimmedText = text.trim();
+
+    if (!trimmedText) {
+      return;
+    }
+
     setItems((prev) => [
       ...prev,
       {
         id: Date.now(),
-        text,
+        text: trimmedText,
         completed: false,
       },
     ]);
-  };
+  }, []);
 
-  const toggleItem = (itemId: number) => {
+  const toggleItem = useCallback((itemId: number) => {
     setItems((prev) =>
       prev.map((item) =>
         item.id === itemId
@@ -33,23 +39,23 @@ const useCardChecklist = ({
           : item,
       ),
     );
-  };
+  }, []);
 
-  const resetItems = () => {
+  const resetItems = useCallback(() => {
     setItems([]);
-  };
+  }, []);
 
-  const setChecklist = (items: ChecklistItem[]) => {
-    setItems(items);
-  };
+  const setChecklist = useCallback((newItems: ChecklistItem[]) => {
+    setItems(newItems);
+  }, []);
 
-  const getChecklistPayload = () => {
+  const getChecklistPayload = useCallback(() => {
     return items.map((item) => ({
       id: item.id,
       text: item.text,
       done: item.completed,
     }));
-  };
+  }, [items]);
 
   return {
     items,
@@ -62,4 +68,3 @@ const useCardChecklist = ({
 };
 
 export default useCardChecklist;
-
