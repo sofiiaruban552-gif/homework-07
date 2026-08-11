@@ -9,9 +9,7 @@ import Input from "./Input";
 
 import useCardForm from "@/hooks/useCardForm";
 
-import useUsersStore, {
-  getAssigneeOptions,
-} from "@/store/useUsersStore";
+import useUsersStore, { getAssigneeOptions } from "@/store/useUsersStore";
 
 interface CardModalProps {
   id?: number;
@@ -27,13 +25,7 @@ if (!modalRoot) {
   throw new Error("Modal root element not found.");
 }
 
-const CardModal = ({
-  id,
-  columnId,
-  open,
-  onClose,
-  isEdit,
-}: CardModalProps) => {
+const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
   const { users } = useUsersStore(
     useShallow((state) => ({
       users: state.users,
@@ -46,14 +38,11 @@ const CardModal = ({
     register,
     handleSubmit,
     errors,
-
     items,
     addItem,
     toggleItem,
-
     cardLoading,
     saving,
-
     submit,
     resetForm,
   } = useCardForm({
@@ -65,6 +54,10 @@ const CardModal = ({
   });
 
   const handleClose = () => {
+    if (saving) {
+      return;
+    }
+
     resetForm();
     onClose();
   };
@@ -73,78 +66,70 @@ const CardModal = ({
     return null;
   }
 
-  if (cardLoading) {
-    return createPortal(
-      <div>Loading...</div>,
-      modalRoot,
-    );
-  }
-
   return createPortal(
-    <Surface
-      className="modal__card"
-      onClick={(event) => event.stopPropagation()}
-    >
-      {isEdit ? "Update card" : "Add new card"}
+    <div className="modal" onClick={handleClose}>
+      <Surface
+        className="modal__card"
+        onClick={(event) => event.stopPropagation()}
+      >
+        {cardLoading && isEdit ? (
+          <p>Loading...</p>
+        ) : (
+          <>
+            <h2>{isEdit ? "Update card" : "Add new card"}</h2>
 
-      <form onSubmit={handleSubmit(submit)}>
-        <Input
-          id="card-title"
-          label="Title"
-          placeholder="Enter title..."
-          {...register("title")}
-          error={errors.title?.message}
-        />
+            <form onSubmit={handleSubmit(submit)}>
+              <Input
+                id="card-title"
+                label="Title"
+                placeholder="Enter title..."
+                {...register("title")}
+                error={errors.title?.message}
+              />
 
-        <Input
-          id="card-description"
-          label="Description"
-          placeholder="Enter description..."
-          {...register("description")}
-          error={errors.description?.message}
-        />
+              <Input
+                id="card-description"
+                label="Description"
+                placeholder="Enter description..."
+                {...register("description")}
+                error={errors.description?.message}
+              />
 
-        <Select
-          id="assignee"
-          label="Assignee"
-          options={assigneeOptions}
-          {...register("assignee")}
-        />
+              <Select
+                id="assignee"
+                label="Assignee"
+                options={assigneeOptions}
+                {...register("assignee")}
+              />
 
-        <Checklist
-          items={items}
-          onAddItem={addItem}
-          onToggleItem={toggleItem}
-        />
+              <Checklist
+                items={items}
+                onAddItem={addItem}
+                onToggleItem={toggleItem}
+              />
 
-        <div className="modal__actions">
-          <Button
-            type="button"
-            variant="secondary"
-            fullWidth
-            onClick={handleClose}
-            disabled={saving}
-          >
-            Cancel
-          </Button>
+              <div className="modal__actions">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  fullWidth
+                  onClick={handleClose}
+                  disabled={saving}
+                >
+                  Cancel
+                </Button>
 
-          <Button
-            type="submit"
-            fullWidth
-            disabled={saving}
-          >
-            {saving
-              ? "Saving..."
-              : isEdit
-                ? "Save"
-                : "Create"}
-          </Button>
-        </div>
-      </form>
-    </Surface>,
+                <Button type="submit" fullWidth disabled={saving}>
+                  {saving ? "Saving..." : isEdit ? "Save" : "Create"}
+                </Button>
+              </div>
+            </form>
+          </>
+        )}
+      </Surface>
+    </div>,
     modalRoot,
   );
 };
 
 export default CardModal;
- 

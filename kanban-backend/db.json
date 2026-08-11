@@ -152,7 +152,7 @@
       "id": 7
     },
     {
-      "title": "test 1",
+      "title": "test 15",
       "description": "test jjjj",
       "columnId": 1,
       "order": 1,
@@ -171,6 +171,11 @@
         {
           "id": 1786346298732,
           "text": "kkk",
+          "done": false
+        },
+        {
+          "id": 1786473346097,
+          "text": "hjj",
           "done": false
         }
       ],

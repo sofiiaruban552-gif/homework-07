@@ -1,5 +1,6 @@
 import type { MouseEvent, PointerEvent } from "react";
 import type { Card, User } from "@/types";
+
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import { Pencil } from "lucide-react";
@@ -39,14 +40,8 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
 
   return (
     <>
-      <article
-        ref={setNodeRef}
-        style={style}
-        className="card"
-        {...listeners}
-        {...attributes}
-      >
-        <div className="card__header">
+      <article ref={setNodeRef} style={style} className="card">
+        <div className="card__header" {...listeners} {...attributes}>
           <h3 className="card__title">{card.title}</h3>
 
           <Button
@@ -61,26 +56,28 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
           </Button>
         </div>
 
-        <p className="card__description">{card.description}</p>
+        <div {...listeners} {...attributes}>
+          <p className="card__description">{card.description}</p>
 
-        <footer className="card__footer">
-          <span>#{card.order}</span>
+          <footer className="card__footer">
+            <span>#{card.order}</span>
 
-          {assignee && (
-            <div
-              className="card__avatar"
-              style={{
-                backgroundColor: assignee.color,
-              }}
-              title={assignee.name}
-            >
-              {assignee.name[0]}
-            </div>
-          )}
-        </footer>
+            {assignee && (
+              <div
+                className="card__avatar"
+                style={{
+                  backgroundColor: assignee.color,
+                }}
+                title={assignee.name}
+              >
+                {assignee.name[0]}
+              </div>
+            )}
+          </footer>
+        </div>
       </article>
 
-      <CardModal id={id} open={isOpen} onClose={close} isEdit />
+      <CardModal id={id} open={isOpen} onClose={close} isEdit={true} />
     </>
   );
 };
