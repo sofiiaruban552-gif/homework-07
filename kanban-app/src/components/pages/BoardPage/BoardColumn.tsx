@@ -34,22 +34,25 @@ const BoardColumn = ({
   const getUser = (id: User["id"] | null) =>
     users.find((user) => user.id === id);
 
+  const count = cards.length;
+  const isFull = column.limit !== null && count >= column.limit;
+
   return (
     <Surface className="column">
       <header className="column__header">
         <h2>{column.title}</h2>
 
-        <span className="column__counter">
-          {cards.length}
+        <span
+          className={clsx("column__counter", isFull && "column__counter--full")}
+        >
+          {count}
+          {column.limit !== null && ` / ${column.limit}`}
         </span>
       </header>
 
       <div
         ref={setNodeRef}
-        className={clsx(
-          "column__cards",
-          isOver && "column__cards--drag-over",
-        )}
+        className={clsx("column__cards", isOver && "column__cards--drag-over")}
       >
         {cards.map((card) => (
           <BoardCard
@@ -60,12 +63,7 @@ const BoardColumn = ({
           />
         ))}
 
-        <Button
-          type="button"
-          variant="dashed"
-          fullWidth
-          onClick={open}
-        >
+        <Button type="button" variant="dashed" fullWidth onClick={open}>
           + Add Card
         </Button>
       </div>

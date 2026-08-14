@@ -106,8 +106,6 @@
   font-weight: var(--font-semibold);
 }
 
-/* User */
-
 .user {
   display: flex;
   align-items: center;
@@ -158,8 +156,6 @@
   background: var(--color-bg);
 }
 
-/* Column */
-
 .column {
   flex: 1;
   min-width: 320px;
@@ -196,7 +192,9 @@
 
   min-width: 28px;
   height: 28px;
+  padding: 0 var(--space-2);
 
+  border: 1px solid var(--color-text-secondary);
   border-radius: var(--radius-round);
   background: var(--color-surface-hover);
 
@@ -205,6 +203,10 @@
   font-weight: var(--font-medium);
 }
 
+.column__counter--full {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
 .column__cards {
   display: flex;
   flex-direction: column;

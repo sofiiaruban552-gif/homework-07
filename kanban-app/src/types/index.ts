@@ -8,6 +8,7 @@ export interface Column {
   id: number;
   title: string;
   order: number;
+  limit: number | null;
 }
 export interface ChecklistItem {
   id: number;
