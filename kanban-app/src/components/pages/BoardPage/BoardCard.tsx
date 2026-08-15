@@ -1,7 +1,7 @@
 import type { MouseEvent, PointerEvent } from "react";
 import type { Card, User } from "@/types";
 
-import { useDraggable } from "@dnd-kit/core";
+import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Pencil } from "lucide-react";
 
@@ -18,10 +18,16 @@ interface BoardCardProps {
 const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
   const { isOpen, open, close } = useModal();
 
-  const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useDraggable({
-      id: String(id),
-    });
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: `card-${id}`,
+  });
 
   const handleOpenEdit = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -33,15 +39,16 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
   };
 
   const style = {
-    transform: CSS.Translate.toString(transform),
+    transform: CSS.Transform.toString(transform),
+    transition,
     opacity: isDragging ? 0.5 : 1,
     cursor: isDragging ? "grabbing" : "grab",
   };
 
   return (
     <>
-      <article ref={setNodeRef} style={style} className="card">
-        <div className="card__header" {...listeners} {...attributes}>
+      <article ref={setNodeRef} style={style} className="card" {...attributes}>
+        <div className="card__header" {...listeners}>
           <h3 className="card__title">{card.title}</h3>
 
           <Button
@@ -56,7 +63,7 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
           </Button>
         </div>
 
-        <div {...listeners} {...attributes}>
+        <div {...listeners}>
           <p className="card__description">{card.description}</p>
 
           <footer className="card__footer">

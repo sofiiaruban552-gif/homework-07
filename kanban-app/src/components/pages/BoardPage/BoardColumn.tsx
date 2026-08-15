@@ -1,4 +1,9 @@
 import { useDroppable } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+
 import clsx from "clsx";
 
 import type { Card, Column, User } from "@/types";
@@ -16,25 +21,20 @@ interface ColumnProps {
   users: User[];
 }
 
-const BoardColumn = ({
-  column,
-  cards,
-  users,
-}: ColumnProps) => {
+const BoardColumn = ({ column, cards, users }: ColumnProps) => {
   const { setNodeRef, isOver } = useDroppable({
-    id: String(column.id),
+    id: `column-${column.id}`,
   });
 
-  const {
-    isOpen,
-    open,
-    close,
-  } = useModal();
+  const { isOpen, open, close } = useModal();
 
   const getUser = (id: User["id"] | null) =>
     users.find((user) => user.id === id);
 
-  const count = cards.length;
+  const sortedCards = [...cards].sort((a, b) => a.order - b.order);
+
+  const count = sortedCards.length;
+
   const isFull = column.limit !== null && count >= column.limit;
 
   return (
@@ -46,6 +46,7 @@ const BoardColumn = ({
           className={clsx("column__counter", isFull && "column__counter--full")}
         >
           {count}
+
           {column.limit !== null && ` / ${column.limit}`}
         </span>
       </header>
@@ -54,18 +55,25 @@ const BoardColumn = ({
         ref={setNodeRef}
         className={clsx("column__cards", isOver && "column__cards--drag-over")}
       >
-        {cards.map((card) => (
-          <BoardCard
-            key={card.id}
-            id={card.id}
-            card={card}
-            assignee={getUser(card.assigneeId)}
-          />
-        ))}
+        <SortableContext
+          items={sortedCards.map((card) => `card-${card.id}`)}
+          strategy={verticalListSortingStrategy}
+        >
+          {sortedCards.map((card) => (
+            <BoardCard
+              key={card.id}
+              id={card.id}
+              card={card}
+              assignee={getUser(card.assigneeId)}
+            />
+          ))}
+        </SortableContext>
 
-        <Button type="button" variant="dashed" fullWidth onClick={open}>
-          + Add Card
-        </Button>
+        <div className="column__drop-zone">
+          <Button type="button" variant="dashed" fullWidth onClick={open}>
+            + Add Card
+          </Button>
+        </div>
       </div>
 
       <CardModal
@@ -79,4 +87,3 @@ const BoardColumn = ({
 };
 
 export default BoardColumn;
-

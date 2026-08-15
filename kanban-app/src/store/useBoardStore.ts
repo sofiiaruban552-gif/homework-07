@@ -21,7 +21,7 @@ interface BoardStore {
   addCard: (data: NewCard) => Promise<void>;
   editCard: (id: number, patch: Partial<Card>) => Promise<void>;
   removeCard: (id: number) => Promise<void>;
-  moveCard: (id: number, toColumn: number) => Promise<void>;
+  moveCard: (id: number, toColumn: number, toIndex: number) => Promise<void>;
 }
 
 const useBoardStore = create<BoardStore>((set, get) => ({
@@ -105,17 +105,74 @@ const useBoardStore = create<BoardStore>((set, get) => ({
       set({ error: "Failed to delete card" });
     }
   },
-  moveCard: async (id, toColumn) => {
+  moveCard: async (id, toColumn, toIndex) => {
     const previousCards = get().cards;
-    set((state) => ({
-      cards: state.cards.map((card) =>
-        card.id === id ? { ...card, columnId: toColumn } : card,
-      ),
+
+    const draggedCard = previousCards.find((card) => card.id === id);
+
+    if (!draggedCard) {
+      return;
+    }
+
+    const fromColumn = draggedCard.columnId;
+
+    const destinationCards = previousCards
+      .filter((card) => card.columnId === toColumn && card.id !== id)
+      .sort((a, b) => a.order - b.order);
+
+
+    destinationCards.splice(toIndex, 0, {
+      ...draggedCard,
+      columnId: toColumn,
+    });
+
+    const reorderedDestinationCards = destinationCards.map((card, index) => ({
+      ...card,
+      columnId: toColumn,
+      order: index + 1,
     }));
+
+    const sourceCards =
+      fromColumn !== toColumn
+        ? previousCards
+            .filter((card) => card.columnId === fromColumn && card.id !== id)
+            .sort((a, b) => a.order - b.order)
+            .map((card, index) => ({
+              ...card,
+              order: index + 1,
+            }))
+        : [];
+
+    const changedCards =
+      fromColumn !== toColumn
+        ? [...sourceCards, ...reorderedDestinationCards]
+        : reorderedDestinationCards;
+
+    set({
+      cards: previousCards.map((card) => {
+        const changedCard = changedCards.find(
+          (changed) => changed.id === card.id,
+        );
+
+        return changedCard ?? card;
+      }),
+    });
+
     try {
-      await updateCard(id, { columnId: toColumn });
+
+      await Promise.all(
+        changedCards.map((card) =>
+          updateCard(card.id, {
+            columnId: card.columnId,
+            order: card.order,
+          }),
+        ),
+      );
     } catch {
-      set({ cards: previousCards, error: "Failed to move card" });
+      set({
+        cards: previousCards,
+        error: "Failed to move card",
+      });
     }
   },
 }));
