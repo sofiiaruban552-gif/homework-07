@@ -73,7 +73,7 @@
       "title": "Design the board layout1",
       "description": "Columns with cards, drag-and-drop between columns.",
       "columnId": 2,
-      "order": 3,
+      "order": 2,
       "assigneeId": 2,
       "createdAt": "2026-07-20T09:10:00.000Z",
       "checklist": []
@@ -123,7 +123,7 @@
       "id": 5,
       "title": "Card modal with validation",
       "description": "Create and edit a card using react-hook-form + zod.",
-      "columnId": 2,
+      "columnId": 3,
       "order": 1,
       "assigneeId": 3,
       "checklist": [],
@@ -134,9 +134,24 @@
       "title": "Read the homework brief",
       "description": "Understand the requirements before coding.",
       "columnId": 2,
-      "order": 2,
+      "order": 1,
       "assigneeId": 4,
       "createdAt": "2026-07-19T18:00:00.000Z"
+    },
+    {
+      "title": "test 123",
+      "description": "test jjjj",
+      "columnId": 1,
+      "order": 1,
+      "assigneeId": 1,
+      "checklist": [
+        {
+          "id": 1786883319307,
+          "text": "todo",
+          "done": false
+        }
+      ],
+      "id": 7
     }
   ]
 }

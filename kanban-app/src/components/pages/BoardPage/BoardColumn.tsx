@@ -69,11 +69,13 @@ const BoardColumn = ({ column, cards, users }: ColumnProps) => {
           ))}
         </SortableContext>
 
-        <div className="column__drop-zone">
-          <Button type="button" variant="dashed" fullWidth onClick={open}>
-            + Add Card
-          </Button>
-        </div>
+        {!isFull && (
+          <div className="column__drop-zone">
+            <Button type="button" variant="dashed" fullWidth onClick={open}>
+              + Add Card
+            </Button>
+          </div>
+        )}
       </div>
 
       <CardModal
