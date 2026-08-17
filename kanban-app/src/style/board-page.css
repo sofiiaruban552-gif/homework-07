@@ -164,13 +164,28 @@
 
   cursor: grab;
 
-  transition:
+ transition:
     background var(--transition),
     border-color var(--transition),
     transform var(--transition),
-    box-shadow var(--transition);
+    box-shadow var(--transition),
+    opacity 300ms ease,
+    max-height 300ms ease,
+    padding 300ms ease,
+    margin 300ms ease;
 }
 
+.card--removing {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+  max-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
 .card:hover {
   background: var(--color-card-hover);
   border-color: var(--color-border-light);
@@ -207,7 +222,10 @@
 .card__edit {
   flex-shrink: 0;
 }
-
+.card__actions {
+  display: flex;
+  gap: var(--space-2);
+}
 .card p {
   margin: 0;
 
