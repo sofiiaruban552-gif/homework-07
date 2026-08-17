@@ -47,7 +47,7 @@
       "title": "Set up the project1",
       "description": "Create a Vite + React + TypeScript app and install dependencies.",
       "columnId": 1,
-      "order": 3,
+      "order": 2,
       "assigneeId": 1,
       "checklist": [
         {
@@ -83,7 +83,7 @@
       "title": "Build the login screen1",
       "description": "Pick a user and store the current user globally.",
       "columnId": 1,
-      "order": 2,
+      "order": 3,
       "assigneeId": null,
       "createdAt": "2026-07-20T09:20:00.000Z",
       "checklist": []
@@ -142,7 +142,7 @@
       "title": "test 123",
       "description": "test jjjj",
       "columnId": 1,
-      "order": 1,
+      "order": 4,
       "assigneeId": 1,
       "checklist": [
         {

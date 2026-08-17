@@ -66,14 +66,6 @@ const BoardPage = () => {
           </div>
 
           <div className="board-header__actions">
-            <label className="switch">
-              <input type="checkbox" defaultChecked />
-
-              <span className="switch__slider" />
-
-              <span className="switch__label">Only My Issues</span>
-            </label>
-
             <div className="user">
               <div
                 className="user__avatar"
