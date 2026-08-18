@@ -95,14 +95,19 @@ const useBoardStore = create<BoardStore>((set, get) => ({
   },
 
   removeCard: async (id) => {
+    const prev = get().cards;
+
+    set({
+      cards: prev.filter((card) => card.id !== id),
+    });
+    
     try {
       await deleteCard(id);
-
-      set((state) => ({
-        cards: state.cards.filter((card) => card.id !== id),
-      }));
     } catch {
-      set({ error: "Failed to delete card" });
+      set({
+        cards: prev,
+        error: "Failed to delete card",
+      });
     }
   },
   moveCard: async (id, toColumn, toIndex) => {
@@ -119,7 +124,6 @@ const useBoardStore = create<BoardStore>((set, get) => ({
     const destinationCards = previousCards
       .filter((card) => card.columnId === toColumn && card.id !== id)
       .sort((a, b) => a.order - b.order);
-
 
     destinationCards.splice(toIndex, 0, {
       ...draggedCard,
@@ -159,7 +163,6 @@ const useBoardStore = create<BoardStore>((set, get) => ({
     });
 
     try {
-
       await Promise.all(
         changedCards.map((card) =>
           updateCard(card.id, {
