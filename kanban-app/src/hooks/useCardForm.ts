@@ -18,7 +18,7 @@ interface UseCardFormProps {
   onSuccess: () => void;
 }
 
-const initialForm: CardForm = {
+const INITIAL_FORM: CardForm = {
   title: "",
   description: "",
   assignee: "",
@@ -48,7 +48,7 @@ const useCardForm = ({
     formState: { errors },
   } = useForm<CardForm>({
     resolver: zodResolver(cardSchema),
-    defaultValues: initialForm,
+    defaultValues: INITIAL_FORM,
   });
 
   const {
@@ -91,9 +91,21 @@ const useCardForm = ({
       return;
     }
 
-    reset(initialForm);
+    reset(INITIAL_FORM);
     resetItems();
   }, [open, isEdit, reset, resetItems]);
+
+  const resetForm = () => {
+    reset(INITIAL_FORM);
+    resetItems();
+  };
+
+  const getFormPayload = (data: CardForm) => ({
+    title: data.title.trim(),
+    description: data.description.trim(),
+    assigneeId: data.assignee ? Number(data.assignee) : null,
+    checklist: getChecklistPayload(),
+  });
 
   const getNextOrder = (columnId: number) => {
     const columnCards = cards.filter((card) => card.columnId === columnId);
@@ -107,52 +119,36 @@ const useCardForm = ({
   };
 
   const submit = async (data: CardForm) => {
-    if (!isEdit && columnId == null) {
-      console.error("columnId is required when creating a card");
-      return;
-    }
+    const payload = getFormPayload(data);
 
     setSaving(true);
 
     try {
-      const checklist = getChecklistPayload();
+      if (isEdit) {
+        if (id == null) {
+          console.error("Card id is required when editing a card");
+          return;
+        }
 
-      const title = data.title.trim();
-      const description = data.description.trim();
-      const assigneeId = data.assignee ? Number(data.assignee) : null;
-
-      if (isEdit && id != null) {
-        await editCard(id, {
-          title,
-          description,
-          assigneeId,
-          checklist,
-        });
+        await editCard(id, payload);
       } else {
-        const order = getNextOrder(columnId!);
+        if (columnId == null) {
+          console.error("columnId is required when creating a card");
+          return;
+        }
 
         await addCard({
-          title,
-          description,
-          columnId: columnId!,
-          order,
-          assigneeId,
-          checklist,
+          ...payload,
+          columnId,
+          order: getNextOrder(columnId),
         });
       }
 
-      reset(initialForm);
-      resetItems();
-
+      resetForm();
       onSuccess();
     } finally {
       setSaving(false);
     }
-  };
-
-  const resetForm = () => {
-    reset(initialForm);
-    resetItems();
   };
 
   return {
