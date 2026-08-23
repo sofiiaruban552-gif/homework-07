@@ -1,14 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SquareKanban } from "lucide-react";
-import { Navigate } from "react-router-dom";
 
-import {
-  DndContext,
-  DragOverlay,
-  closestCorners,
-} from "@dnd-kit/core";
-
-import { ROUTES } from "@/types/routes";
+import { DndContext, DragOverlay, closestCorners } from "@dnd-kit/core";
 
 import useBoardStore from "@/store/useBoardStore";
 import useAuthStore from "@/store/useAuthStore";
@@ -30,18 +23,24 @@ const BoardPage = () => {
   const { activeCard, handleDragStart, handleDragEnd, handleDragCancel } =
     useBoardDragAndDrop();
 
+  const [onlyMyIssues, setOnlyMyIssues] = useState(true);
+
   useEffect(() => {
     fetchBoard();
     fetchUsers();
   }, [fetchBoard, fetchUsers]);
 
   if (!currentUser) {
-    return <Navigate to={ROUTES.LOGIN} replace />;
+    return null;
   }
 
   if (loading || usersLoading) {
     return <p>Loading board...</p>;
   }
+
+  const filteredCards = onlyMyIssues
+    ? cards.filter((card) => card.assigneeId === currentUser.id)
+    : cards;
 
   const activeAssignee =
     activeCard?.assigneeId != null
@@ -66,6 +65,18 @@ const BoardPage = () => {
           </div>
 
           <div className="board-header__actions">
+            <label className="switch">
+              <input
+                type="checkbox"
+                checked={onlyMyIssues}
+                onChange={(event) => setOnlyMyIssues(event.target.checked)}
+              />
+
+              <span className="switch__slider" />
+
+              <span className="switch__label">Only My Issues</span>
+            </label>
+
             <div className="user">
               <div
                 className="user__avatar"
@@ -90,7 +101,9 @@ const BoardPage = () => {
             <BoardColumn
               key={column.id}
               column={column}
-              cards={cards.filter((card) => card.columnId === column.id)}
+              cards={filteredCards.filter(
+                (card) => card.columnId === column.id,
+              )}
               users={users}
             />
           ))}

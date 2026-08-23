@@ -8,10 +8,7 @@ import useBoardStore from "@/store/useBoardStore";
 import useCardData from "./useCardData";
 import useCardChecklist from "./useCardChecklist";
 
-import {
-  cardSchema,
-  type CardForm,
-} from "@/schemas/cardSchema";
+import { cardSchema, type CardForm } from "@/schemas/cardSchema";
 
 interface UseCardFormProps {
   id?: number;
@@ -34,8 +31,9 @@ const useCardForm = ({
   isEdit,
   onSuccess,
 }: UseCardFormProps) => {
-  const { addCard, editCard } = useBoardStore(
+  const { cards, addCard, editCard } = useBoardStore(
     useShallow((state) => ({
+      cards: state.cards,
       addCard: state.addCard,
       editCard: state.editCard,
     })),
@@ -97,6 +95,17 @@ const useCardForm = ({
     resetItems();
   }, [open, isEdit, reset, resetItems]);
 
+  const getNextOrder = (columnId: number) => {
+    const columnCards = cards.filter((card) => card.columnId === columnId);
+
+    return (
+      columnCards.reduce(
+        (maxOrder, card) => Math.max(maxOrder, card.order),
+        0,
+      ) + 1
+    );
+  };
+
   const submit = async (data: CardForm) => {
     if (!isEdit && columnId == null) {
       console.error("columnId is required when creating a card");
@@ -108,24 +117,26 @@ const useCardForm = ({
     try {
       const checklist = getChecklistPayload();
 
+      const title = data.title.trim();
+      const description = data.description.trim();
+      const assigneeId = data.assignee ? Number(data.assignee) : null;
+
       if (isEdit && id != null) {
         await editCard(id, {
-          title: data.title.trim(),
-          description: data.description.trim(),
-          assigneeId: data.assignee
-            ? Number(data.assignee)
-            : null,
+          title,
+          description,
+          assigneeId,
           checklist,
         });
       } else {
+        const order = getNextOrder(columnId!);
+
         await addCard({
-          title: data.title.trim(),
-          description: data.description.trim(),
+          title,
+          description,
           columnId: columnId!,
-          order: 1,
-          assigneeId: data.assignee
-            ? Number(data.assignee)
-            : null,
+          order,
+          assigneeId,
           checklist,
         });
       }
