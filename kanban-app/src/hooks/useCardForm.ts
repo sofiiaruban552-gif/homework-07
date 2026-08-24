@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useShallow } from "zustand/react/shallow";
 
 import useBoardStore from "@/store/useBoardStore";
+import useAuthStore from "@/store/useAuthStore";
 
 import useCardData from "./useCardData";
 import useCardChecklist from "./useCardChecklist";
@@ -38,7 +39,7 @@ const useCardForm = ({
       editCard: state.editCard,
     })),
   );
-
+  const currentUser = useAuthStore((state) => state.currentUser);
   const [saving, setSaving] = useState(false);
 
   const {
@@ -48,7 +49,10 @@ const useCardForm = ({
     formState: { errors },
   } = useForm<CardForm>({
     resolver: zodResolver(cardSchema),
-    defaultValues: INITIAL_FORM,
+    defaultValues: {
+      ...INITIAL_FORM,
+      assignee: currentUser ? String(currentUser.id) : "",
+    },
   });
 
   const {
@@ -90,10 +94,12 @@ const useCardForm = ({
     if (!open || isEdit) {
       return;
     }
-
-    reset(INITIAL_FORM);
+    reset({
+      ...INITIAL_FORM,
+      assignee: currentUser ? String(currentUser.id) : "",
+    });
     resetItems();
-  }, [open, isEdit, reset, resetItems]);
+  }, [open, isEdit, currentUser, reset, resetItems]);
 
   const resetForm = () => {
     reset(INITIAL_FORM);

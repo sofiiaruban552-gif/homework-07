@@ -1,5 +1,4 @@
 import { createPortal } from "react-dom";
-import { useShallow } from "zustand/react/shallow";
 
 import Button from "./Button";
 import Surface from "./Surface";
@@ -26,11 +25,7 @@ if (!modalRoot) {
 }
 
 const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
-  const { users } = useUsersStore(
-    useShallow((state) => ({
-      users: state.users,
-    })),
-  );
+  const users = useUsersStore((state) => state.users);
 
   const assigneeOptions = getAssigneeOptions(users);
 
