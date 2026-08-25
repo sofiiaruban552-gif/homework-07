@@ -1,24 +1,28 @@
 import { useEffect, useState } from "react";
 import type { MouseEvent, PointerEvent } from "react";
-import type { Card, User } from "@/types";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Pencil, Trash2 } from "lucide-react";
 
-import CardModal from "@/components/shared/CardModal";
+import type { Card, User } from "@/types";
+
 import Button from "@/components/shared/Button";
+import CardModal from "@/components/shared/CardModal";
+
 import useModal from "@/hooks/useModal";
 import useBoardStore from "@/store/useBoardStore";
 
+import { getChecklistProgress } from "@/utils/checklist";
+
 interface BoardCardProps {
-  id: number;
   card: Card;
   assignee?: User;
 }
 
-const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
+const BoardCard = ({ card, assignee }: BoardCardProps) => {
   const { isOpen, open, close } = useModal();
+
   const removeCard = useBoardStore((state) => state.removeCard);
 
   const [isRemoving, setIsRemoving] = useState(false);
@@ -31,8 +35,10 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
     transition,
     isDragging,
   } = useSortable({
-    id: `card-${id}`,
+    id: `card-${card.id}`,
   });
+
+  const { total, done, percent } = getChecklistProgress(card.checklist);
 
   const handleOpenEdit = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
@@ -53,12 +59,14 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
       return;
     }
 
-    const timer = setTimeout(() => {
-      removeCard(id);
+    const timer = window.setTimeout(() => {
+      void removeCard(card.id);
     }, 300);
 
-    return () => clearTimeout(timer);
-  }, [isRemoving, id, removeCard]);
+    return () => {
+      window.clearTimeout(timer);
+    };
+  }, [isRemoving, card.id, removeCard]);
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -71,9 +79,9 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
     <>
       <article
         ref={setNodeRef}
+        {...attributes}
         style={style}
         className={`card ${isRemoving ? "card--removing" : ""}`}
-        {...attributes}
       >
         <div className="card__header" {...listeners}>
           <h3 className="card__title">{card.title}</h3>
@@ -103,8 +111,23 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
           </div>
         </div>
 
-        <div {...listeners}>
+        <div className="card__content" {...listeners}>
           <p className="card__description">{card.description}</p>
+
+          {total > 0 && (
+            <div className="card__progress-row">
+              <div className="card__progress-bar">
+                <div
+                  className="card__progress-fill"
+                  style={{ width: `${percent}%` }}
+                />
+              </div>
+
+              <span className="card__progress-text">
+                {done}/{total}
+              </span>
+            </div>
+          )}
 
           <footer className="card__footer">
             <span>#{card.order}</span>
@@ -112,9 +135,7 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
             {assignee && (
               <div
                 className="card__avatar"
-                style={{
-                  backgroundColor: assignee.color,
-                }}
+                style={{ backgroundColor: assignee.color }}
                 title={assignee.name}
               >
                 {assignee.name[0]}
@@ -124,7 +145,7 @@ const BoardCard = ({ id, card, assignee }: BoardCardProps) => {
         </div>
       </article>
 
-      <CardModal id={id} open={isOpen} onClose={close} isEdit={true} />
+      <CardModal id={card.id} open={isOpen} onClose={close} isEdit />
     </>
   );
 };

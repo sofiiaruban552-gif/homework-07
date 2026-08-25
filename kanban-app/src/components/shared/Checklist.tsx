@@ -1,34 +1,52 @@
 import { useState } from "react";
+
 import Button from "./Button";
 import Input from "./Input";
 
-export interface ChecklistItem {
-  id: number;
-  text: string;
-  completed: boolean;
-}
+import type { ChecklistItem } from "@/types";
+
+import { getChecklistProgress } from "@/utils/checklist";
 
 interface ChecklistProps {
   items: ChecklistItem[];
-  onAddItem: (text: string) => void;
+  onAddItem?: (text: string) => void;
   onToggleItem: (id: number) => void;
 }
 
 const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
   const [value, setValue] = useState("");
 
+  const { total, done } = getChecklistProgress(items);
+
   const handleAddItem = () => {
     const text = value.trim();
 
-    if (!text) return;
+    if (!text || !onAddItem) {
+      return;
+    }
 
     onAddItem(text);
     setValue("");
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "Enter") {
+      return;
+    }
+
+    event.preventDefault();
+    handleAddItem();
+  };
+
   return (
     <section className="checklist">
-      <h2 className="checklist__title">Checklist</h2>
+      <div className="checklist__header">
+        <h2 className="checklist__title">Checklist</h2>
+
+        <span className="checklist__progress">
+          {done}/{total}
+        </span>
+      </div>
 
       <ul className="checklist__list">
         {items.map((item) => (
@@ -37,7 +55,7 @@ const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
               <input
                 className="checklist__checkbox"
                 type="checkbox"
-                checked={item.completed}
+                checked={item.done}
                 onChange={() => onToggleItem(item.id)}
               />
 
@@ -47,23 +65,21 @@ const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
         ))}
       </ul>
 
-      <div className="checklist__controls">
-        <Input
-          value={value}
-          placeholder="Add item..."
-          className="checklist__input"
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handleAddItem();
-            }
-          }}
-        />
+      {onAddItem && (
+        <div className="checklist__controls">
+          <Input
+            value={value}
+            placeholder="Add item..."
+            className="checklist__input"
+            onChange={(event) => setValue(event.target.value)}
+            onKeyDown={handleKeyDown}
+          />
 
-        <Button type="button" onClick={handleAddItem}>
-          + Add
-        </Button>
-      </div>
+          <Button type="button" onClick={handleAddItem}>
+            + Add
+          </Button>
+        </div>
+      )}
     </section>
   );
 };

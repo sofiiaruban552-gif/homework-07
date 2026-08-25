@@ -85,7 +85,7 @@ const useCardForm = ({
       (card.checklist ?? []).map((item) => ({
         id: item.id,
         text: item.text,
-        completed: item.done,
+        done: item.done,
       })),
     );
   }, [card, reset, setChecklist]);

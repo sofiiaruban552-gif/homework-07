@@ -62,7 +62,6 @@ const BoardColumn = ({ column, cards, users }: ColumnProps) => {
           {sortedCards.map((card) => (
             <BoardCard
               key={card.id}
-              id={card.id}
               card={card}
               assignee={getUser(card.assigneeId)}
             />

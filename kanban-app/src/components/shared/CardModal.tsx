@@ -73,7 +73,7 @@ const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
           <>
             <h2>{isEdit ? "Update card" : "Add new card"}</h2>
 
-            <form onSubmit={handleSubmit(submit)}>
+            <form onSubmit={handleSubmit(submit)} className="modal__form">
               <Input
                 id="card-title"
                 label="Title"

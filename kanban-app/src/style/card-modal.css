@@ -26,6 +26,12 @@
   gap: var(--space-2);
 }
 
+.modal__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
 .modal__title {
   margin-bottom: var(--space-6);
 }
@@ -45,7 +51,13 @@
 .checklist {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-2);
+}
+
+.checklist__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .checklist__title {
@@ -125,24 +137,21 @@
 .modal__actions .button {
   flex: 1;
 }
-/* Shared */
 
-.input,
+.input__wrapper,
 .select {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
 }
 
-.input__label,
+.input__label
 .select__label, .checklist__title {
   color: var(--color-text-secondary);
   font-size: var(--text-lg);
   font-weight: var(--font-semibold);
   line-height: 1.4;
 }
-
-/* Fields */
 
 .input__field,
 .select__field {
@@ -186,8 +195,6 @@
   box-shadow: 0 0 0 4px var(--focus-ring-primary);
 }
 
-/* Error */
-
 .input__field--error,
 .select__field--error {
   border-color: var(--color-danger);
@@ -205,8 +212,6 @@
   font-weight: var(--font-semibold);
   line-height: 1.4;
 }
-
-/* Select */
 
 .select__wrapper {
   position: relative;

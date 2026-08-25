@@ -82,7 +82,7 @@
       "title": "Connect the API",
       "description": "GET / POST / PATCH / DELETE cards from json-server.",
       "columnId": 2,
-      "order": 2,
+      "order": 1,
       "assigneeId": 1,
       "checklist": [
         {
@@ -98,12 +98,12 @@
         {
           "id": 3,
           "text": "updateCard()",
-          "done": true
+          "done": false
         },
         {
           "id": 4,
           "text": "deleteCard()",
-          "done": true
+          "done": false
         }
       ],
       "createdAt": "2026-07-20T10:00:00.000Z"
@@ -113,7 +113,7 @@
       "title": "Card modal with validation",
       "description": "Create and edit a card using react-hook-form + zod.",
       "columnId": 2,
-      "order": 1,
+      "order": 2,
       "assigneeId": 3,
       "checklist": [],
       "createdAt": "2026-07-20T10:30:00.000Z"
@@ -122,10 +122,17 @@
       "id": 6,
       "title": "Read the homework brief",
       "description": "Understand the requirements before coding.",
-      "columnId": 3,
+      "columnId": 1,
       "order": 2,
       "assigneeId": 4,
-      "createdAt": "2026-07-19T18:00:00.000Z"
+      "createdAt": "2026-07-19T18:00:00.000Z",
+      "checklist": [
+        {
+          "id": 1787593147843,
+          "text": "todo",
+          "done": true
+        }
+      ]
     }
   ]
 }
