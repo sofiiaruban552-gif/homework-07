@@ -4,23 +4,16 @@ import { useShallow } from "zustand/react/shallow";
 import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 
 import useBoardStore from "@/store/useBoardStore";
-
-const CARD_PREFIX = "card-";
-const COLUMN_PREFIX = "column-";
-const HALF_SIZE = 2;
-
-type DropRect = {
-  top: number;
-  height: number;
-};
-
-const getCardId = (id: string) => Number(id.replace(CARD_PREFIX, ""));
-
-const getColumnId = (id: string) => Number(id.replace(COLUMN_PREFIX, ""));
-
-const isCardId = (id: string) => id.startsWith(CARD_PREFIX);
-
-const isColumnId = (id: string) => id.startsWith(COLUMN_PREFIX);
+import {
+  canMoveToColumn,
+  getCardId,
+  getColumnId,
+  getDestinationCards,
+  getDropIndex,
+  isCardId,
+  isColumnId,
+  type DropRect,
+} from "@/utils/boardDragDrop";
 
 const useBoardDragAndDrop = () => {
   const { cards, columns, moveCard } = useBoardStore(
@@ -52,24 +45,18 @@ const useBoardDragAndDrop = () => {
 
     const { active, over } = event;
 
-    if (!over) {
-      return;
-    }
+    if (!over) return;
 
     const activeId = String(active.id);
     const overId = String(over.id);
 
-    if (!isCardId(activeId)) {
-      return;
-    }
+    if (!isCardId(activeId)) return;
 
     const cardId = getCardId(activeId);
 
     const draggedCard = cards.find((card) => card.id === cardId);
 
-    if (!draggedCard) {
-      return;
-    }
+    if (!draggedCard) return;
 
     if (isCardId(overId)) {
       handleDropOnCard({
@@ -105,43 +92,36 @@ const useBoardDragAndDrop = () => {
     activeRect: DropRect | null;
     targetRect: DropRect;
   }) => {
-    if (cardId === targetId) {
-      return;
-    }
+    if (cardId === targetId) return;
 
     const targetCard = cards.find((card) => card.id === targetId);
 
-    if (!targetCard) {
-      return;
-    }
+    if (!targetCard) return;
 
     const destinationColumnId = targetCard.columnId;
 
-    const destinationCards = getDestinationCards(destinationColumnId, cardId);
+    const destinationCards = getDestinationCards(
+      cards,
+      destinationColumnId,
+      cardId,
+    );
 
     const targetIndex = destinationCards.findIndex(
       (card) => card.id === targetId,
     );
 
-    if (targetIndex === -1) {
-      return;
-    }
+    if (targetIndex === -1) return;
 
     if (
       !canMoveToColumn(
+        columns,
         sourceColumnId,
         destinationColumnId,
         destinationCards.length,
       )
-    ) {
-      return;
-    }
+    ) return;
 
-    const newIndex = getDropIndex({
-      targetIndex,
-      activeRect,
-      targetRect,
-    });
+    const newIndex = getDropIndex({ targetIndex, activeRect, targetRect });
 
     moveCard(cardId, destinationColumnId, newIndex);
   };
@@ -157,69 +137,21 @@ const useBoardDragAndDrop = () => {
   }) => {
     const destinationColumn = columns.find((column) => column.id === columnId);
 
-    if (!destinationColumn) {
-      return;
-    }
+    if (!destinationColumn) return;
 
-    const destinationCards = getDestinationCards(columnId, cardId);
+    const destinationCards = getDestinationCards(cards, columnId, cardId);
 
-    if (!canMoveToColumn(sourceColumnId, columnId, destinationCards.length)) {
-      return;
-    }
+    if (
+      !canMoveToColumn(
+        columns,
+        sourceColumnId,
+        columnId,
+        destinationCards.length,
+      )
+    ) return;
+    
 
     moveCard(cardId, columnId, destinationCards.length);
-  };
-
-  const getDropIndex = ({
-    targetIndex,
-    activeRect,
-    targetRect,
-  }: {
-    targetIndex: number;
-    activeRect: DropRect | null;
-    targetRect: DropRect;
-  }) => {
-    if (!activeRect) {
-      return targetIndex;
-    }
-
-    const activeCenter = activeRect.top + activeRect.height / HALF_SIZE;
-
-    const targetCenter = targetRect.top + targetRect.height / HALF_SIZE;
-
-    return activeCenter > targetCenter ? targetIndex + 1 : targetIndex;
-  };
-
-  const getDestinationCards = (columnId: number, excludedCardId: number) => {
-    return cards
-      .filter(
-        (card) => card.columnId === columnId && card.id !== excludedCardId,
-      )
-      .sort((a, b) => a.order - b.order);
-  };
-
-  const canMoveToColumn = (
-    sourceColumnId: number,
-    destinationColumnId: number,
-    destinationCount: number,
-  ) => {
-    if (sourceColumnId === destinationColumnId) {
-      return true;
-    }
-
-    const destinationColumn = columns.find(
-      (column) => column.id === destinationColumnId,
-    );
-
-    if (!destinationColumn) {
-      return false;
-    }
-
-    if (destinationColumn.limit === null) {
-      return true;
-    }
-
-    return destinationCount < destinationColumn.limit;
   };
 
   const activeCard =
