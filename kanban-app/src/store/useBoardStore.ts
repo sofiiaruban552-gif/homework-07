@@ -1,4 +1,6 @@
 import { create } from "zustand";
+import { toast } from "react-toastify";
+
 import {
   getCards,
   getCardById,
@@ -9,6 +11,15 @@ import {
 } from "@/api";
 
 import type { Card, Column, NewCard } from "@/types";
+
+const ERROR_MESSAGES = {
+  LOAD_BOARD: "Failed to load board",
+  LOAD_CARD: "Failed to load card",
+  CREATE_CARD: "Failed to create card",
+  UPDATE_CARD: "Failed to update card",
+  DELETE_CARD: "Failed to delete card",
+  MOVE_CARD: "Failed to move card",
+} as const;
 
 interface BoardStore {
   cards: Card[];
@@ -44,8 +55,10 @@ const useBoardStore = create<BoardStore>((set, get) => ({
     } catch {
       set({
         loading: false,
-        error: "Failed to load board",
+        error: ERROR_MESSAGES.LOAD_BOARD,
       });
+
+      toast.error(ERROR_MESSAGES.LOAD_BOARD);
     }
   },
 
@@ -65,7 +78,10 @@ const useBoardStore = create<BoardStore>((set, get) => ({
 
       return card;
     } catch {
-      set({ error: "Failed to load card" });
+      set({ error: ERROR_MESSAGES.LOAD_CARD });
+
+      toast.error(ERROR_MESSAGES.LOAD_CARD);
+
       return null;
     }
   },
@@ -78,7 +94,9 @@ const useBoardStore = create<BoardStore>((set, get) => ({
         cards: [...state.cards, newCard],
       }));
     } catch {
-      set({ error: "Failed to create card" });
+      set({ error: ERROR_MESSAGES.CREATE_CARD });
+
+      toast.error(ERROR_MESSAGES.CREATE_CARD);
     }
   },
 
@@ -90,7 +108,9 @@ const useBoardStore = create<BoardStore>((set, get) => ({
         cards: state.cards.map((card) => (card.id === id ? updatedCard : card)),
       }));
     } catch {
-      set({ error: "Failed to update card" });
+      set({ error: ERROR_MESSAGES.UPDATE_CARD });
+
+      toast.error(ERROR_MESSAGES.UPDATE_CARD);
     }
   },
 
@@ -100,16 +120,19 @@ const useBoardStore = create<BoardStore>((set, get) => ({
     set({
       cards: prev.filter((card) => card.id !== id),
     });
-    
+
     try {
       await deleteCard(id);
     } catch {
       set({
         cards: prev,
-        error: "Failed to delete card",
+        error: ERROR_MESSAGES.DELETE_CARD,
       });
+
+      toast.error(ERROR_MESSAGES.DELETE_CARD);
     }
   },
+
   moveCard: async (id, toColumn, toIndex) => {
     const previousCards = get().cards;
 
@@ -174,8 +197,10 @@ const useBoardStore = create<BoardStore>((set, get) => ({
     } catch {
       set({
         cards: previousCards,
-        error: "Failed to move card",
+        error: ERROR_MESSAGES.MOVE_CARD,
       });
+
+      toast.error(ERROR_MESSAGES.MOVE_CARD);
     }
   },
 }));

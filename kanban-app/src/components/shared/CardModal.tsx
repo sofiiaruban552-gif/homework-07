@@ -49,9 +49,7 @@ const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
   });
 
   const handleClose = () => {
-    if (saving) {
-      return;
-    }
+    if (saving) return;
 
     resetForm();
     onClose();

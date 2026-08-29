@@ -1,4 +1,7 @@
 import { Route, Routes } from "react-router";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import "./App.css";
 
 import BoardPage from "./components/pages/BoardPage/BoardPage";
@@ -22,8 +25,18 @@ const App = () => {
           }
         />
       </Routes>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        pauseOnHover
+      />
     </div>
   );
 };
 
 export default App;
+
