@@ -43,9 +43,11 @@ const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
       <div className="checklist__header">
         <h2 className="checklist__title">Checklist</h2>
 
-        <span className="checklist__progress">
-          {done}/{total}
-        </span>
+        {total > 0 && (
+          <span className="checklist__progress">
+            {done}/{total}
+          </span>
+        )}
       </div>
 
       <ul className="checklist__list">
