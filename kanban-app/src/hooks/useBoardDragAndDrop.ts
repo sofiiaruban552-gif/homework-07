@@ -14,6 +14,7 @@ import {
   isColumnId,
   type DropRect,
 } from "@/utils/boardDragDrop";
+import { toast } from "react-toastify";
 
 const useBoardDragAndDrop = () => {
   const { cards, columns, moveCard } = useBoardStore(
@@ -58,11 +59,13 @@ const useBoardDragAndDrop = () => {
 
     if (!draggedCard) return;
 
+    const sourceColumnId = draggedCard.columnId;
+
     if (isCardId(overId)) {
       handleDropOnCard({
         cardId,
         targetId: getCardId(overId),
-        sourceColumnId: draggedCard.columnId,
+        sourceColumnId,
         activeRect: active.rect.current.translated,
         targetRect: over.rect,
       });
@@ -74,8 +77,10 @@ const useBoardDragAndDrop = () => {
       handleDropOnColumn({
         cardId,
         columnId: getColumnId(overId),
-        sourceColumnId: draggedCard.columnId,
+        sourceColumnId,
       });
+
+      return;
     }
   };
 
@@ -119,7 +124,11 @@ const useBoardDragAndDrop = () => {
         destinationColumnId,
         destinationCards.length,
       )
-    ) return;
+    ) {
+      toast.error("This column has reached its card limit.");
+
+      return;
+    }
 
     const newIndex = getDropIndex({ targetIndex, activeRect, targetRect });
 
@@ -148,8 +157,10 @@ const useBoardDragAndDrop = () => {
         columnId,
         destinationCards.length,
       )
-    ) return;
-    
+    ) {
+      toast.error("This column has reached its card limit.");
+      return;
+    }
 
     moveCard(cardId, columnId, destinationCards.length);
   };

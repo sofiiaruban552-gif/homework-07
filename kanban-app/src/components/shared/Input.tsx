@@ -1,6 +1,7 @@
 import type { InputHTMLAttributes } from "react";
 import clsx from "clsx";
 
+
 interface InputProps
   extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;

@@ -9,6 +9,7 @@ import Input from "./Input";
 import useCardForm from "@/hooks/useCardForm";
 
 import useUsersStore, { getAssigneeOptions } from "@/store/useUsersStore";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface CardModalProps {
   id?: number;
@@ -66,7 +67,7 @@ const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
         onClick={(event) => event.stopPropagation()}
       >
         {cardLoading && isEdit ? (
-          <p>Loading...</p>
+          <LoadingSpinner />
         ) : (
           <>
             <h2>{isEdit ? "Update card" : "Add new card"}</h2>

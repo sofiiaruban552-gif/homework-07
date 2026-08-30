@@ -9,6 +9,7 @@ import useUsersStore from "@/store/useUsersStore";
 import useBoardDragAndDrop from "@/hooks/useBoardDragAndDrop";
 
 import Surface from "@/components/shared/Surface";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import BoardColumn from "./BoardColumn";
 
 const BoardPage = () => {
@@ -34,10 +35,14 @@ const BoardPage = () => {
     return null;
   }
 
-  if (loading || usersLoading) {
-    return <p>Loading board...</p>;
-  }
-
+ if (loading || usersLoading) {
+   return (
+     <div className="board-page__loading">
+       <LoadingSpinner />
+     </div>
+   );
+ }
+  
   const filteredCards = onlyMyIssues
     ? cards.filter((card) => card.assigneeId === currentUser.id)
     : cards;

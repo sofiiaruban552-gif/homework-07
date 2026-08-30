@@ -122,8 +122,8 @@
       "id": 6,
       "title": "Read the homework brief",
       "description": "Understand the requirements before coding.",
-      "columnId": 1,
-      "order": 2,
+      "columnId": 2,
+      "order": 3,
       "assigneeId": 4,
       "createdAt": "2026-07-19T18:00:00.000Z",
       "checklist": [
