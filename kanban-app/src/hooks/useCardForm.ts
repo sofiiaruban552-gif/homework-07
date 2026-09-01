@@ -10,6 +10,11 @@ import useCardData from "./useCardData";
 import useCardChecklist from "./useCardChecklist";
 
 import { cardSchema, type CardForm } from "@/schemas/cardSchema";
+import {
+  getCardFormPayload,
+  getInitialCardForm,
+  getNextCardOrder,
+} from "@/utils/cardForm";
 
 interface UseCardFormProps {
   id?: number;
@@ -18,12 +23,6 @@ interface UseCardFormProps {
   isEdit: boolean;
   onSuccess: () => void;
 }
-
-const INITIAL_FORM: CardForm = {
-  title: "",
-  description: "",
-  assignee: "",
-};
 
 const useCardForm = ({
   id,
@@ -39,7 +38,9 @@ const useCardForm = ({
       editCard: state.editCard,
     })),
   );
+
   const currentUser = useAuthStore((state) => state.currentUser);
+
   const [saving, setSaving] = useState(false);
 
   const {
@@ -49,10 +50,7 @@ const useCardForm = ({
     formState: { errors },
   } = useForm<CardForm>({
     resolver: zodResolver(cardSchema),
-    defaultValues: {
-      ...INITIAL_FORM,
-      assignee: currentUser ? String(currentUser.id) : "",
-    },
+    defaultValues: getInitialCardForm(currentUser?.id),
   });
 
   const {
@@ -91,41 +89,22 @@ const useCardForm = ({
   }, [card, reset, setChecklist]);
 
   useEffect(() => {
-    if (!open || isEdit) {
-      return;
-    }
-    reset({
-      ...INITIAL_FORM,
-      assignee: currentUser ? String(currentUser.id) : "",
-    });
+    if (!open || isEdit) return;
+
+    reset(getInitialCardForm(currentUser?.id));
     resetItems();
   }, [open, isEdit, currentUser, reset, resetItems]);
 
   const resetForm = () => {
-    reset(INITIAL_FORM);
+    reset(getInitialCardForm(currentUser?.id));
     resetItems();
   };
 
-  const getFormPayload = (data: CardForm) => ({
-    title: data.title.trim(),
-    description: data.description.trim(),
-    assigneeId: data.assignee ? Number(data.assignee) : null,
-    checklist: getChecklistPayload(),
-  });
-
-  const getNextOrder = (columnId: number) => {
-    const columnCards = cards.filter((card) => card.columnId === columnId);
-
-    return (
-      columnCards.reduce(
-        (maxOrder, card) => Math.max(maxOrder, card.order),
-        0,
-      ) + 1
-    );
-  };
-
   const submit = async (data: CardForm) => {
-    const payload = getFormPayload(data);
+    const payload = getCardFormPayload(
+      data,
+      getChecklistPayload(),
+    );
 
     setSaving(true);
 
@@ -139,14 +118,14 @@ const useCardForm = ({
         await editCard(id, payload);
       } else {
         if (columnId == null) {
-          console.error("columnId is required when creating a card");
+          console.error("Column id is required when creating a card");
           return;
         }
 
         await addCard({
           ...payload,
           columnId,
-          order: getNextOrder(columnId),
+          order: getNextCardOrder(cards, columnId),
         });
       }
 
@@ -175,3 +154,4 @@ const useCardForm = ({
 };
 
 export default useCardForm;
+
