@@ -9,6 +9,7 @@ import Input from "./Input";
 import useCardForm from "@/hooks/useCardForm";
 
 import useUsersStore, { getAssigneeOptions } from "@/store/useUsersStore";
+import useBoardStore from "@/store/useBoardStore";
 import LoadingSpinner from "./LoadingSpinner";
 
 interface CardModalProps {
@@ -25,9 +26,18 @@ if (!modalRoot) {
   throw new Error("Modal root element not found.");
 }
 
-const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
+const CardModal = ({
+  id,
+  columnId,
+  open,
+  onClose,
+  isEdit,
+}: CardModalProps) => {
   const users = useUsersStore((state) => state.users);
-
+  const toggleSubtask = useBoardStore((state) => state.toggleSubtask);
+  const card = useBoardStore((state) =>
+  state.cards.find((card) => card.id === id),
+);
   const assigneeOptions = getAssigneeOptions(users);
 
   const {
@@ -59,6 +69,16 @@ const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
   if (!open) {
     return null;
   }
+
+  const handleToggleSubtask = (subtaskId: number) => {
+    if (id == null) {
+
+      toggleItem(subtaskId);
+      return;
+    }
+
+    void toggleSubtask(id, subtaskId);
+  };
 
   return createPortal(
     <div className="modal" onClick={handleClose}>
@@ -97,9 +117,9 @@ const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
               />
 
               <Checklist
-                items={items}
-                onAddItem={addItem}
-                onToggleItem={toggleItem}
+                items={isEdit ? (card?.checklist ?? []) : items}
+                onAddItem={isEdit ? undefined : addItem}
+                onToggleItem={isEdit ? handleToggleSubtask : toggleItem}
               />
 
               <div className="modal__actions">
@@ -127,3 +147,4 @@ const CardModal = ({ id, columnId, open, onClose, isEdit }: CardModalProps) => {
 };
 
 export default CardModal;
+

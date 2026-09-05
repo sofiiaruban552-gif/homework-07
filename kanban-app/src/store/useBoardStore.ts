@@ -19,6 +19,7 @@ const ERROR_MESSAGES = {
   UPDATE_CARD: "Failed to update card",
   DELETE_CARD: "Failed to delete card",
   MOVE_CARD: "Failed to move card",
+  TOGGLE_SUBTASK: "Failed to update checklist item",
 } as const;
 
 interface BoardStore {
@@ -33,6 +34,8 @@ interface BoardStore {
   editCard: (id: number, patch: Partial<Card>) => Promise<void>;
   removeCard: (id: number) => Promise<void>;
   moveCard: (id: number, toColumn: number, toIndex: number) => Promise<void>;
+
+  toggleSubtask: (cardId: number, subtaskId: number) => Promise<void>;
 }
 
 const useBoardStore = create<BoardStore>((set, get) => ({
@@ -201,6 +204,56 @@ const useBoardStore = create<BoardStore>((set, get) => ({
       });
 
       toast.error(ERROR_MESSAGES.MOVE_CARD);
+    }
+  },
+
+  toggleSubtask: async (cardId, subtaskId) => {
+    const card = get().cards.find((card) => card.id === cardId);
+
+    if (!card) {
+      return;
+    }
+
+    const previousChecklist = card.checklist;
+
+    const nextChecklist = previousChecklist.map((item) =>
+      item.id === subtaskId
+        ? {
+            ...item,
+            done: !item.done,
+          }
+        : item,
+    );
+
+    set((state) => ({
+      cards: state.cards.map((card) =>
+        card.id === cardId
+          ? {
+              ...card,
+              checklist: nextChecklist,
+            }
+          : card,
+      ),
+    }));
+
+    try {
+      await updateCard(cardId, {
+        checklist: nextChecklist,
+      });
+    } catch {
+      set((state) => ({
+        cards: state.cards.map((card) =>
+          card.id === cardId
+            ? {
+                ...card,
+                checklist: previousChecklist,
+              }
+            : card,
+        ),
+        error: ERROR_MESSAGES.TOGGLE_SUBTASK,
+      }));
+
+      toast.error(ERROR_MESSAGES.TOGGLE_SUBTASK);
     }
   },
 }));

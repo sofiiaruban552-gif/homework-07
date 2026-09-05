@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "./App.css";
 
 import BoardPage from "./components/pages/BoardPage/BoardPage";
-import LoginPage from "./components/pages/LoadingPage/LoginPage";
+import LoginPage from "./components/pages/LoginPage/LoginPage";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 
 import { ROUTES } from "./types/routes";

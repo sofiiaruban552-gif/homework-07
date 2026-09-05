@@ -49,13 +49,7 @@ const useCardChecklist = ({
     setItems(items);
   }, []);
 
-  const getChecklistPayload = useCallback(() => {
-    return items.map((item) => ({
-      id: item.id,
-      text: item.text,
-      done: item.done,
-    }));
-  }, [items]);
+  const getChecklistPayload = useCallback(() => items, [items]);
 
   return {
     items,

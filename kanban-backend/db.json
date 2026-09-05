@@ -63,7 +63,7 @@
         {
           "id": 3,
           "text": "Install dependencies",
-          "done": false
+          "done": true
         }
       ],
       "createdAt": "2026-07-20T09:00:00.000Z"
@@ -133,6 +133,21 @@
           "done": true
         }
       ]
+    },
+    {
+      "title": "test2",
+      "description": "test jjjj",
+      "assigneeId": 1,
+      "checklist": [
+        {
+          "id": 1788622084478,
+          "text": "todo",
+          "done": true
+        }
+      ],
+      "columnId": 2,
+      "order": 3,
+      "id": 7
     }
   ]
 }
