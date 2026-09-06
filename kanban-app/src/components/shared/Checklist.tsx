@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { checklistItemSchema } from "@/schemas/checklistSchema";
 
 import Button from "./Button";
 import Input from "./Input";
 
 import type { ChecklistItem } from "@/types";
-
 import { getChecklistProgress } from "@/utils/checklist";
 
 interface ChecklistProps {
@@ -15,27 +15,38 @@ interface ChecklistProps {
 
 const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
   const [value, setValue] = useState("");
+  const [error, setError] = useState<string | undefined>();
 
   const { total, done } = getChecklistProgress(items);
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value);
+    if (error) {
+      setError(undefined);
+    }
+  };
+  
   const handleAddItem = () => {
-    const text = value.trim();
+    const result = checklistItemSchema.safeParse({
+      text: value,
+    });
 
-    if (!text || !onAddItem) {
+    if (!result.success) {
+      setError(result.error.issues[0]?.message);
       return;
     }
 
-    onAddItem(text);
+    onAddItem?.(result.data.text);
+
     setValue("");
+    setError(undefined);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== "Enter") {
-      return;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleAddItem();
     }
-
-    event.preventDefault();
-    handleAddItem();
   };
 
   return (
@@ -73,8 +84,9 @@ const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
             value={value}
             placeholder="Add item..."
             className="checklist__input"
-            onChange={(event) => setValue(event.target.value)}
+            onChange={handleChange}
             onKeyDown={handleKeyDown}
+            error={error}
           />
 
           <Button type="button" onClick={handleAddItem}>
