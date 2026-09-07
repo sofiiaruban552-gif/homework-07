@@ -143,3 +143,10 @@ body {
     transform: rotate(360deg);
   }
 }
+
+.avatar {
+  display: grid;
+  place-items: center;
+
+  border-radius: 50%;
+}

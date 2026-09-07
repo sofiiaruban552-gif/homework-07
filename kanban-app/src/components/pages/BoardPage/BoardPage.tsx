@@ -11,6 +11,7 @@ import useBoardDragAndDrop from "@/hooks/useBoardDragAndDrop";
 import Surface from "@/components/shared/Surface";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import BoardColumn from "./BoardColumn";
+import Avatar from "@/components/shared/Avatar";
 
 const BoardPage = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -83,14 +84,7 @@ const BoardPage = () => {
             </label>
 
             <div className="user">
-              <div
-                className="user__avatar"
-                style={{
-                  backgroundColor: currentUser.color,
-                }}
-              >
-                {currentUser.name[0]}
-              </div>
+              <Avatar user={currentUser} className="user__avatar" />
 
               <span className="user__name">{currentUser.name}</span>
 
@@ -129,15 +123,7 @@ const BoardPage = () => {
                 <span>#{activeCard.order}</span>
 
                 {activeAssignee && (
-                  <div
-                    className="card__avatar"
-                    style={{
-                      backgroundColor: activeAssignee.color,
-                    }}
-                    title={activeAssignee.name}
-                  >
-                    {activeAssignee.name[0]}
-                  </div>
+                  <Avatar user={activeAssignee} className="card__avatar" />
                 )}
               </footer>
             </div>

@@ -54,13 +54,6 @@
   width: 48px;
   height: 48px;
 
-  display: grid;
-  place-items: center;
-
-  border-radius: 50%;
-
-  background: var(--avatar-purple);
-
   color: #000;
   font-weight: var(--font-bold);
 }
@@ -282,12 +275,6 @@
 .card__avatar {
   width: 32px;
   height: 32px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: var(--radius-round);
 
   color: var(--color-text);
   font-size: var(--text-sm);

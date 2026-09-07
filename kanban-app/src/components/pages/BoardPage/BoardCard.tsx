@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type { MouseEvent, PointerEvent } from "react";
 
 import { useSortable } from "@dnd-kit/sortable";
@@ -14,6 +14,7 @@ import useModal from "@/hooks/useModal";
 import useBoardStore from "@/store/useBoardStore";
 
 import { getChecklistProgress } from "@/utils/checklist";
+import Avatar from "@/components/shared/Avatar";
 
 interface BoardCardProps {
   card: Card;
@@ -54,19 +55,11 @@ const BoardCard = ({ card, assignee }: BoardCardProps) => {
     event.stopPropagation();
   };
 
-  useEffect(() => {
-    if (!isRemoving) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
+  const handleAnimationEnd = () => {
+    if (isRemoving) {
       void removeCard(card.id);
-    }, 300);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [isRemoving, card.id, removeCard]);
+    }
+  };
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -81,6 +74,7 @@ const BoardCard = ({ card, assignee }: BoardCardProps) => {
         ref={setNodeRef}
         {...attributes}
         style={style}
+        onAnimationEnd={handleAnimationEnd}
         className={`card ${isRemoving ? "card--removing" : ""}`}
       >
         <div className="card__header" {...listeners}>
@@ -132,15 +126,7 @@ const BoardCard = ({ card, assignee }: BoardCardProps) => {
           <footer className="card__footer">
             <span>#{card.order}</span>
 
-            {assignee && (
-              <div
-                className="card__avatar"
-                style={{ backgroundColor: assignee.color }}
-                title={assignee.name}
-              >
-                {assignee.name[0]}
-              </div>
-            )}
+            {assignee && <Avatar user={assignee} className="card__avatar" />}
           </footer>
         </div>
       </article>
