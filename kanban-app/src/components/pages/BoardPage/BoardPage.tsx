@@ -12,6 +12,7 @@ import Surface from "@/components/shared/Surface";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import BoardColumn from "./BoardColumn";
 import Avatar from "@/components/shared/Avatar";
+import BoardCard from "./BoardCard";
 
 const BoardPage = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -111,23 +112,7 @@ const BoardPage = () => {
 
       <DragOverlay>
         {activeCard && (
-          <div className="card">
-            <div className="card__header">
-              <h3 className="card__title">{activeCard.title}</h3>
-            </div>
-
-            <div>
-              <p className="card__description">{activeCard.description}</p>
-
-              <footer className="card__footer">
-                <span>#{activeCard.order}</span>
-
-                {activeAssignee && (
-                  <Avatar user={activeAssignee} className="card__avatar" />
-                )}
-              </footer>
-            </div>
-          </div>
+          <BoardCard card={activeCard} assignee={activeAssignee} isOverlay />
         )}
       </DragOverlay>
     </DndContext>

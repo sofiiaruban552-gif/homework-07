@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { MouseEvent, PointerEvent } from "react";
+import clsx from "clsx";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
@@ -19,9 +20,10 @@ import Avatar from "@/components/shared/Avatar";
 interface BoardCardProps {
   card: Card;
   assignee?: User;
+  isOverlay?: boolean;
 }
 
-const BoardCard = ({ card, assignee }: BoardCardProps) => {
+const BoardCard = ({ card, assignee, isOverlay = false }: BoardCardProps) => {
   const { isOpen, open, close } = useModal();
 
   const removeCard = useBoardStore((state) => state.removeCard);
@@ -37,6 +39,7 @@ const BoardCard = ({ card, assignee }: BoardCardProps) => {
     isDragging,
   } = useSortable({
     id: `card-${card.id}`,
+    disabled: isOverlay,
   });
 
   const { total, done, percent } = getChecklistProgress(card.checklist);
@@ -71,41 +74,45 @@ const BoardCard = ({ card, assignee }: BoardCardProps) => {
   return (
     <>
       <article
-        ref={setNodeRef}
-        {...attributes}
-        style={style}
-        onAnimationEnd={handleAnimationEnd}
-        className={`card ${isRemoving ? "card--removing" : ""}`}
+        ref={isOverlay ? undefined : setNodeRef}
+        {...(!isOverlay ? attributes : {})}
+        style={isOverlay ? undefined : style}
+        onAnimationEnd={isOverlay ? undefined : handleAnimationEnd}
+        className={clsx("card", {
+          "card--removing": isRemoving,
+        })}
       >
-        <div className="card__header" {...listeners}>
+        <div className="card__header" {...(!isOverlay ? listeners : {})}>
           <h3 className="card__title">{card.title}</h3>
 
-          <div className="card__actions">
-            <Button
-              type="button"
-              variant="secondary"
-              small
-              className="card__edit"
-              onPointerDown={handleButtonPointerDown}
-              onClick={handleOpenEdit}
-            >
-              <Pencil size={14} />
-            </Button>
+          {!isOverlay && (
+            <div className="card__actions">
+              <Button
+                type="button"
+                variant="secondary"
+                small
+                className="card__edit"
+                onPointerDown={handleButtonPointerDown}
+                onClick={handleOpenEdit}
+              >
+                <Pencil size={14} />
+              </Button>
 
-            <Button
-              type="button"
-              variant="secondary"
-              small
-              className="card__delete"
-              onPointerDown={handleButtonPointerDown}
-              onClick={handleDelete}
-            >
-              <Trash2 size={14} />
-            </Button>
-          </div>
+              <Button
+                type="button"
+                variant="secondary"
+                small
+                className="card__delete"
+                onPointerDown={handleButtonPointerDown}
+                onClick={handleDelete}
+              >
+                <Trash2 size={14} />
+              </Button>
+            </div>
+          )}
         </div>
 
-        <div className="card__content" {...listeners}>
+        <div className="card__content" {...(!isOverlay ? listeners : {})}>
           <p className="card__description">{card.description}</p>
 
           {total > 0 && (
@@ -131,7 +138,9 @@ const BoardCard = ({ card, assignee }: BoardCardProps) => {
         </div>
       </article>
 
-      <CardModal id={card.id} open={isOpen} onClose={close} isEdit />
+      {!isOverlay && (
+        <CardModal id={card.id} open={isOpen} onClose={close} isEdit />
+      )}
     </>
   );
 };
