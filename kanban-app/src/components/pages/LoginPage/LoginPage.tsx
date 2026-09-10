@@ -5,6 +5,7 @@ import UserCard from "./UserCard";
 import useAuthStore from "@/store/useAuthStore";
 import useUsersStore from "@/store/useUsersStore";
 import { ROUTES } from "@/types/routes";
+import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -30,11 +31,9 @@ const LoginPage = () => {
       navigate(ROUTES.BOARD);
     }
   };
-  
+
   if (loading) {
-    return (
-        <p>Loading board...</p>
-    );
+    return <LoadingSpinner />;
   }
 
   return (
@@ -45,10 +44,7 @@ const LoginPage = () => {
       <div className="user-selector__grid">
         {users.map((user) => (
           <UserCard
-            key={user.id}
-            id={user.id}
-            name={user.name}
-            color={user.color}
+            user={user}
             checked={selectedUser === user.id}
             onChange={handleSelectUser}
           />

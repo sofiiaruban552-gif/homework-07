@@ -1,34 +1,30 @@
+import Avatar from "@/components/shared/Avatar";
+import type { User } from "@/types";
 import clsx from "clsx";
 
 interface UserCardProps {
-  id: number;
-  name: string;
-  color: string;
+  user: User;
   checked: boolean;
   onChange: (value: number) => void;
 }
 
-const UserCard = ({ id, name, color, checked, onChange }: UserCardProps) => (
+const UserCard = ({ user, checked, onChange }: UserCardProps) => (
   <label
-    htmlFor={`user-${id}`}
+    htmlFor={`user-${user.id}`}
     className={clsx("user-card", {
       "user-card--selected": checked,
     })}
   >
     <input
-      id={`user-${id}`}
+      id={`user-${user.id}`}
       className="user-card__input"
       type="radio"
       name="user"
       checked={checked}
-      onChange={() => onChange(id)}
+      onChange={() => onChange(user.id)}
     />
-
-    <div className="user-card__avatar" style={{ backgroundColor: color }}>
-      {name[0]}
-    </div>
-
-    <span className="user-card__name">{name}</span>
+    <Avatar user={user} className="user-card__avatar" />
+    <span className="user-card__name">{user.name}</span>
   </label>
 );
 
