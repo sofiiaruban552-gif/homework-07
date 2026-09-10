@@ -9,6 +9,7 @@ import LoginPage from "./components/pages/LoginPage/LoginPage";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 
 import { ROUTES } from "./types/routes";
+import ErrorPage from "./components/pages/ErrorPage";
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
 
       <ToastContainer
