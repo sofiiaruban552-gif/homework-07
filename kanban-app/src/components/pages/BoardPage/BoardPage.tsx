@@ -11,8 +11,8 @@ import useBoardDragAndDrop from "@/hooks/useBoardDragAndDrop";
 import Surface from "@/components/shared/Surface";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import BoardColumn from "./BoardColumn";
-import Avatar from "@/components/shared/Avatar";
 import BoardCard from "./BoardCard";
+import UserInfo from "@/components/shared/UserInfo";
 
 const BoardPage = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -85,9 +85,11 @@ const BoardPage = () => {
             </label>
 
             <div className="user">
-              <Avatar user={currentUser} className="user__avatar" />
-
-              <span className="user__name">{currentUser.name}</span>
+              <UserInfo
+                user={currentUser}
+                avatarClassName="user__avatar"
+                nameClassName="user__name"
+              />
 
               <button className="user__logout" onClick={logout}>
                 Exit

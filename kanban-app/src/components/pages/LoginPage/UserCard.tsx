@@ -1,4 +1,4 @@
-import Avatar from "@/components/shared/Avatar";
+import UserInfo from "@/components/shared/UserInfo";
 import type { User } from "@/types";
 import clsx from "clsx";
 
@@ -23,8 +23,11 @@ const UserCard = ({ user, checked, onChange }: UserCardProps) => (
       checked={checked}
       onChange={() => onChange(user.id)}
     />
-    <Avatar user={user} className="user-card__avatar" />
-    <span className="user-card__name">{user.name}</span>
+    <UserInfo
+      user={user}
+      avatarClassName="user-card__avatar"
+      nameClassName="user-card__name"
+    />
   </label>
 );
 
