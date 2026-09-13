@@ -6,6 +6,9 @@ import type { DragEndEvent, DragStartEvent } from "@dnd-kit/core";
 import useBoardStore from "@/store/useBoardStore";
 import {
   canMoveToColumn,
+  findCardById,
+  findColumnById,
+  getActiveCardId,
   getCardId,
   getColumnId,
   getDestinationCards,
@@ -28,13 +31,13 @@ const useBoardDragAndDrop = () => {
   const [activeCardId, setActiveCardId] = useState<number | null>(null);
 
   const handleDragStart = (event: DragStartEvent) => {
-    const activeId = String(event.active.id);
+    const cardId = getActiveCardId(event.active);
 
-    if (!isCardId(activeId)) {
+    if (cardId === null) {
       return;
     }
 
-    setActiveCardId(getCardId(activeId));
+    setActiveCardId(cardId);
   };
 
   const handleDragCancel = () => {
@@ -46,18 +49,23 @@ const useBoardDragAndDrop = () => {
 
     const { active, over } = event;
 
-    if (!over) return;
+    if (!over) {
+      return;
+    }
 
-    const activeId = String(active.id);
+    const cardId = getActiveCardId(active);
+
+    if (cardId === null) {
+      return;
+    }
+
     const overId = String(over.id);
 
-    if (!isCardId(activeId)) return;
+    const draggedCard = findCardById(cards, cardId);
 
-    const cardId = getCardId(activeId);
-
-    const draggedCard = cards.find((card) => card.id === cardId);
-
-    if (!draggedCard) return;
+    if (!draggedCard) {
+      return;
+    }
 
     const sourceColumnId = draggedCard.columnId;
 
@@ -79,8 +87,6 @@ const useBoardDragAndDrop = () => {
         columnId: getColumnId(overId),
         sourceColumnId,
       });
-
-      return;
     }
   };
 
@@ -99,7 +105,7 @@ const useBoardDragAndDrop = () => {
   }) => {
     if (cardId === targetId) return;
 
-    const targetCard = cards.find((card) => card.id === targetId);
+    const targetCard = findCardById(cards, targetId);
 
     if (!targetCard) return;
 
@@ -144,7 +150,7 @@ const useBoardDragAndDrop = () => {
     columnId: number;
     sourceColumnId: number;
   }) => {
-    const destinationColumn = columns.find((column) => column.id === columnId);
+    const destinationColumn = findColumnById(columns, columnId);
 
     if (!destinationColumn) return;
 
@@ -166,9 +172,7 @@ const useBoardDragAndDrop = () => {
   };
 
   const activeCard =
-    activeCardId === null
-      ? null
-      : (cards.find((card) => card.id === activeCardId) ?? null);
+    activeCardId === null ? null : (findCardById(cards, activeCardId) ?? null);
 
   return {
     activeCardId,

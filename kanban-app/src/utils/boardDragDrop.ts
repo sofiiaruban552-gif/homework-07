@@ -1,4 +1,5 @@
 import type { Card, Column } from "@/types";
+import type { DragStartEvent } from "@dnd-kit/core";
 
 const CARD_PREFIX = "card-";
 const COLUMN_PREFIX = "column-";
@@ -17,6 +18,22 @@ export const getColumnId = (id: string) =>
 export const isCardId = (id: string) => id.startsWith(CARD_PREFIX);
 
 export const isColumnId = (id: string) => id.startsWith(COLUMN_PREFIX);
+
+export const findCardById = (cards: Card[], cardId: number) =>
+  cards.find((card) => card.id === cardId);
+
+export const findColumnById = (columns: Column[], columnId: number) =>
+  columns.find((column) => column.id === columnId);
+
+export const getActiveCardId = (active: DragStartEvent["active"]) => {
+  const activeId = String(active.id);
+
+  if (!isCardId(activeId)) {
+    return null;
+  }
+
+  return getCardId(activeId);
+};
 
 export const getDropIndex = ({
   targetIndex,
