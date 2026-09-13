@@ -27,7 +27,6 @@ interface UsersStore {
   error: string | null;
 
   fetchUsers: () => Promise<void>;
-  getUserById: (id: number) => User | undefined;
 }
 
 const useUsersStore = create<UsersStore>((set, get) => ({
@@ -62,9 +61,6 @@ const useUsersStore = create<UsersStore>((set, get) => ({
     }
   },
 
-  getUserById: (id) => {
-    return get().users.find((user) => user.id === id);
-  },
 }));
 
 export default useUsersStore;

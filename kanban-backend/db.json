@@ -46,8 +46,8 @@
       "id": 1,
       "title": "Set up the project",
       "description": "Create a Vite + React + TypeScript app and install dependencies.",
-      "columnId": 3,
-      "order": 1,
+      "columnId": 2,
+      "order": 3,
       "assigneeId": 1,
       "checklist": [
         {
@@ -122,15 +122,15 @@
       "id": 6,
       "title": "Read the homework brief",
       "description": "Understand the requirements before coding.",
-      "columnId": 2,
-      "order": 2,
+      "columnId": 1,
+      "order": 3,
       "assigneeId": 4,
       "createdAt": "2026-07-19T18:00:00.000Z",
       "checklist": [
         {
           "id": 1787593147843,
           "text": "todo",
-          "done": true
+          "done": false
         }
       ]
     },
@@ -146,7 +146,7 @@
         }
       ],
       "columnId": 2,
-      "order": 3,
+      "order": 2,
       "id": 7
     }
   ]
