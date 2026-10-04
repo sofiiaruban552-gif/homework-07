@@ -20,12 +20,6 @@ interface CardModalProps {
   isEdit: boolean;
 }
 
-const modalRoot = document.getElementById("modal-root");
-
-if (!modalRoot) {
-  throw new Error("Modal root element not found.");
-}
-
 const CardModal = ({
   id,
   columnId,
@@ -33,6 +27,12 @@ const CardModal = ({
   onClose,
   isEdit,
 }: CardModalProps) => {
+  const modalRoot = document.getElementById("modal-root");
+
+  if (!modalRoot) {
+    throw new Error("Modal root element not found.");
+  }
+
   const users = useUsersStore((state) => state.users);
   const toggleSubtask = useBoardStore((state) => state.toggleSubtask);
   const card = useBoardStore((state) =>
