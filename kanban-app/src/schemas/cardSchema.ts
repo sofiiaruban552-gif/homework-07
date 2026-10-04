@@ -10,5 +10,3 @@ export const cardSchema = z.object({
 
   assignee: z.string(),
 });
-
-export type CardForm = z.infer<typeof cardSchema>;

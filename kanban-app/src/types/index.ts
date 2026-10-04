@@ -1,3 +1,6 @@
+import type { cardSchema } from "@/schemas/cardSchema";
+import { z } from "zod";
+
 export interface User {
   id: number;
   name: string;
@@ -27,3 +30,5 @@ export interface Card {
 }
 
 export type NewCard = Omit<Card, "id" | "createdAt">;
+
+export type CardForm = z.infer<typeof cardSchema>;

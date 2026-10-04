@@ -1,16 +1,11 @@
-import type { ChecklistItem } from "@/types";
+
+import { checklistItems } from "@/test/fixtures";
 import { getChecklistProgress } from "./checklist";
 
 describe("getChecklistProgress", () => {
- 
-  const items: ChecklistItem[] = [
-    { id: 1, text: "First item", done: true },
-    { id: 2, text: "Second item", done: false },
-    { id: 3, text: "Third item", done: false },
-  ];
 
   it("returns the correct progress", () => {
-    expect(getChecklistProgress(items)).toEqual({
+    expect(getChecklistProgress(checklistItems)).toEqual({
       total: 3,
       done: 1,
       percent: 33,

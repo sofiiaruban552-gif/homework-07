@@ -1,5 +1,4 @@
-import type { Card, ChecklistItem } from "@/types";
-import type { CardForm } from "@/schemas/cardSchema";
+import type { Card, CardForm, ChecklistItem } from "@/types";
 
 export const getInitialCardForm = (
   userId?: number,
