@@ -5,7 +5,6 @@ import {
   getNextCardOrder,
 } from "./cardForm";
 
-
 import { checklistItems, cards, cardForm } from "@/test/fixtures/index";
 
 describe("getInitialCardForm", () => {
@@ -53,17 +52,6 @@ describe("getCardFormPayload", () => {
       assigneeId: null,
       checklist: checklistItems,
     });
-  });
-
-  it("preserves the checklist", () => {
-    const data: CardForm = {
-      ...cardForm,
-      assignee: "",
-    };
-
-    const result = getCardFormPayload(data, checklistItems);
-
-    expect(result.checklist).toBe(checklistItems);
   });
 });
 

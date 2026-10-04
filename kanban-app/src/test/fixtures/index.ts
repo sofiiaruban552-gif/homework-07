@@ -1,4 +1,4 @@
-import type { Card, CardForm, ChecklistItem } from "@/types";
+import type { Card, CardForm, ChecklistItem, Column } from "@/types";
 
 export const checklistItems: ChecklistItem[] = [
   { id: 1, text: "First item", done: true },
@@ -29,3 +29,9 @@ export const cardForm: CardForm = {
   description: "Test description",
   assignee: "",
 };
+
+export const columns: Column[] = [
+  { id: 10, limit: null },
+  { id: 20, limit: 3 },
+  { id: 30, limit: 5 },
+] as Column[];
