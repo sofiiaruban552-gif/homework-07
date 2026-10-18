@@ -7,10 +7,20 @@ import { checklistItems } from '@/test/fixtures';
 const onToggleItem = vi.fn();
 const onAddItem = vi.fn();
 
+const ITEM_LABELS = ['First item', 'Second item', 'Third item'];
+const CHECKBOX_STATES = [
+  { index: 0, checked: true },
+  { index: 1, checked: false },
+  { index: 2, checked: false },
+];
+const NEW_ITEM = 'New item';
+const ADD_ITEM_PLACEHOLDER = 'Add item...';
+const ADD_BUTTON_NAME = '+ Add';
+
 const renderChecklist = (
   props: Partial<React.ComponentProps<typeof Checklist>> = {},
-) => {
-  return render(
+) =>
+  render(
     <Checklist
       items={checklistItems}
       onToggleItem={onToggleItem}
@@ -18,49 +28,55 @@ const renderChecklist = (
       {...props}
     />,
   );
-};
+
+const getAddInput = () =>
+  screen.getByPlaceholderText(ADD_ITEM_PLACEHOLDER);
+
+const getAddButton = () =>
+  screen.getByRole('button', { name: ADD_BUTTON_NAME });
 
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
 describe('Checklist', () => {
-  it('renders all checklist items', () => {
+  it.each(ITEM_LABELS)('renders the item "%s"', (label) => {
     renderChecklist();
 
-    expect(screen.getByText('First item')).toBeInTheDocument();
-    expect(screen.getByText('Second item')).toBeInTheDocument();
-    expect(screen.getByText('Third item')).toBeInTheDocument();
+    expect(screen.getByText(label)).toBeInTheDocument();
   });
 
-  it('renders completed and incomplete items correctly', () => {
-    renderChecklist();
+  it.each(CHECKBOX_STATES)(
+    'renders checkbox $index as checked=$checked',
+    ({ index, checked }) => {
+      renderChecklist();
 
-    const checkboxes = screen.getAllByRole('checkbox');
+      const checkboxes = screen.getAllByRole('checkbox');
 
-    expect(checkboxes[0]).toBeChecked();
-    expect(checkboxes[1]).not.toBeChecked();
-    expect(checkboxes[2]).not.toBeChecked();
-  });
+      if (checked) {
+        expect(checkboxes[index]).toBeChecked();
+      } else {
+        expect(checkboxes[index]).not.toBeChecked();
+      }
+    },
+  );
 
   it('shows add controls when onAddItem is provided', () => {
     renderChecklist();
 
-    expect(screen.getByPlaceholderText('Add item...')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: '+ Add' }),
-    ).toBeInTheDocument();
+    expect(getAddInput()).toBeInTheDocument();
+    expect(getAddButton()).toBeInTheDocument();
   });
 
   it('hides add controls when onAddItem is omitted', () => {
     renderChecklist({ onAddItem: undefined });
 
     expect(
-      screen.queryByPlaceholderText('Add item...'),
+      screen.queryByPlaceholderText(ADD_ITEM_PLACEHOLDER),
     ).not.toBeInTheDocument();
 
     expect(
-      screen.queryByRole('button', { name: '+ Add' }),
+      screen.queryByRole('button', { name: ADD_BUTTON_NAME }),
     ).not.toBeInTheDocument();
   });
 
@@ -69,16 +85,10 @@ describe('Checklist', () => {
 
     renderChecklist();
 
-    await user.type(
-      screen.getByPlaceholderText('Add item...'),
-      'New item',
-    );
+    await user.type(getAddInput(), NEW_ITEM);
+    await user.click(getAddButton());
 
-    await user.click(
-      screen.getByRole('button', { name: '+ Add' }),
-    );
-
-    expect(onAddItem).toHaveBeenCalledWith('New item');
+    expect(onAddItem).toHaveBeenCalledWith(NEW_ITEM);
   });
 
   it('calls onAddItem when Enter is pressed', async () => {
@@ -86,12 +96,9 @@ describe('Checklist', () => {
 
     renderChecklist();
 
-    await user.type(
-      screen.getByPlaceholderText('Add item...'),
-      'New item{Enter}',
-    );
+    await user.type(getAddInput(), `${NEW_ITEM}{Enter}`);
 
-    expect(onAddItem).toHaveBeenCalledWith('New item');
+    expect(onAddItem).toHaveBeenCalledWith(NEW_ITEM);
   });
 
   it('does not add an empty item', async () => {
@@ -99,11 +106,8 @@ describe('Checklist', () => {
 
     renderChecklist();
 
-    await user.click(
-      screen.getByRole('button', { name: '+ Add' }),
-    );
+    await user.click(getAddButton());
 
     expect(onAddItem).not.toHaveBeenCalled();
   });
 });
-
