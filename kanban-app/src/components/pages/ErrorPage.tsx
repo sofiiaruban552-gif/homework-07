@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Surface from "../shared/Surface";
 import Button from "../shared/Button";
-import { ROUTES } from "@/types/routes";
+import { ROUTES } from "@/constants/routes";
 
 const ErrorPage = () => {
   const navigate = useNavigate();

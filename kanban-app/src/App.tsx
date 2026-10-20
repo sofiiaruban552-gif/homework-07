@@ -8,7 +8,7 @@ import BoardPage from "./components/pages/BoardPage/BoardPage";
 import LoginPage from "./components/pages/LoginPage/LoginPage";
 import ProtectedRoute from "./components/shared/ProtectedRoute";
 
-import { ROUTES } from "./types/routes";
+import { ROUTES } from "./constants/routes";
 import ErrorPage from "./components/pages/ErrorPage";
 
 const App = () => {
@@ -41,4 +41,3 @@ const App = () => {
 };
 
 export default App;
-

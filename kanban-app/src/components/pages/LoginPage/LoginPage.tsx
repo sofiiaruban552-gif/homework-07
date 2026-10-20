@@ -4,7 +4,7 @@ import Surface from "@/components/shared/Surface";
 import UserCard from "./UserCard";
 import useAuthStore from "@/store/useAuthStore";
 import useUsersStore from "@/store/useUsersStore";
-import { ROUTES } from "@/types/routes";
+import { ROUTES } from "@/constants/routes";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
 
 const LoginPage = () => {

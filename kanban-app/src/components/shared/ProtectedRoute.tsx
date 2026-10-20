@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { ROUTES } from "@/types/routes";
+import { ROUTES } from "@/constants/routes";
 import useAuthStore from "@/store/useAuthStore";
 
 type Props = {

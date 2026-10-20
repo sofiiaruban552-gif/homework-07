@@ -1,6 +1,6 @@
 import { getCardFormPayload, getNextCardOrder } from "./cardForm";
 
-import { checklistItems, cards, cardForm } from "@/test/fixtures/index";
+import { checklistItems, cards, cardForm } from "@/test/fixtures";
 
 describe("getCardFormPayload", () => {
   it.each([
@@ -47,4 +47,4 @@ describe("getNextCardOrder", () => {
   ])("%s", (_description, columnId, expected) => {
     expect(getNextCardOrder(cards, columnId)).toBe(expected);
   });
-});;
+});
