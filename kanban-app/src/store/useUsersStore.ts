@@ -1,7 +1,9 @@
 import { create } from "zustand";
+import { toast } from "react-toastify";
 
 import { getUsers } from "@/api";
 import type { User } from "@/types";
+import { ERROR_MESSAGES } from "@/constants/error-messages";
 
 export interface AssigneeOption {
   value: string;
@@ -58,6 +60,7 @@ const useUsersStore = create<UsersStore>((set, get) => ({
         loading: false,
         error: "Failed to load users",
       });
+      toast.error(ERROR_MESSAGES.LOAD_USERS);
     }
   },
 

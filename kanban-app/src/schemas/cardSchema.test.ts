@@ -1,4 +1,5 @@
-import { CARD_ERROR_MESSAGES, cardSchema } from "./cardSchema";
+import { CARD_ERROR_MESSAGES } from "@/constants/error-messages";
+import { cardSchema } from "./cardSchema";
 
 const validCardData = {
   title: "Test card",
