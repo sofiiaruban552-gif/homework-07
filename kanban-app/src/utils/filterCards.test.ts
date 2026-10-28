@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
-import { filterCards } from "./filterCards";
+
 import { cards } from "@/test/fixtures";
+import filterCards from "./filterCards";
 
 describe("filterCards", () => {
  it.each([
