@@ -9,20 +9,35 @@ export const checklistItems: ChecklistItem[] = [
 export const cards: Card[] = [
   {
     id: 1,
+    title: "Fix login",
+    description: "Fix authentication bug",
     columnId: 10,
     order: 1,
+    assigneeId: 100,
+    createdAt: "2026-01-01",
+    checklist: [],
   },
   {
     id: 2,
+    title: "Add dashboard",
+    description: "Create analytics dashboard",
     columnId: 10,
     order: 3,
+    assigneeId: 200,
+    createdAt: "2026-01-02",
+    checklist: [],
   },
   {
     id: 3,
+    title: "Improve login page",
+    description: "Update login styles",
     columnId: 20,
     order: 5,
+    assigneeId: 100,
+    createdAt: "2026-01-03",
+    checklist: [],
   },
-] as Card[];
+];
 
 export const cardForm: CardForm = {
   title: "Test card",
