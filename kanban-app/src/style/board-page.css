@@ -351,3 +351,9 @@
   justify-content: center;
   min-height: 100vh;
 }
+.board-search {
+  max-width: 240px;
+}
+.board-search .input__field {
+   padding: 12px 16px;
+}

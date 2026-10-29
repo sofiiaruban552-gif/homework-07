@@ -13,6 +13,8 @@ import LoadingSpinner from "@/components/shared/LoadingSpinner";
 import BoardColumn from "./BoardColumn";
 import BoardCard from "./BoardCard";
 import UserInfo from "@/components/shared/UserInfo";
+import filterCards from "@/utils/filterCards";
+import Input from "@/components/shared/Input";
 
 const BoardPage = () => {
   const currentUser = useAuthStore((state) => state.currentUser);
@@ -27,6 +29,7 @@ const BoardPage = () => {
     useBoardDragAndDrop();
 
   const [onlyMyIssues, setOnlyMyIssues] = useState(true);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
     fetchBoard();
@@ -45,9 +48,11 @@ const BoardPage = () => {
    );
  }
   
-  const filteredCards = onlyMyIssues
-    ? cards.filter((card) => card.assigneeId === currentUser.id)
-    : cards;
+  const filteredCards = filterCards(cards, {
+    query,
+    onlyMine: onlyMyIssues,
+    userId: currentUser.id,
+  });
 
   const activeAssignee =
     activeCard?.assigneeId != null
@@ -72,6 +77,14 @@ const BoardPage = () => {
           </div>
 
           <div className="board-header__actions">
+            <Input
+              id="board-search"
+              type="search"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder="Search issues..."
+              className="board-search"
+            />
             <label className="switch">
               <input
                 type="checkbox"
