@@ -2,13 +2,10 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserCard from './UserCard';
-import type { User } from '@/types';
+import { mockUsers } from '@/test/fixtures';
 
-const mockUser: User = {
-  id: 1,
-  name: 'John Doe',
-  color: '#ff0000',
-};
+
+const mockUser = mockUsers[0];
 
 const onChange = vi.fn();
 
