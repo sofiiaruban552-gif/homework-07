@@ -10,11 +10,11 @@ import useBoardDragAndDrop from "@/hooks/useBoardDragAndDrop";
 
 import Surface from "@/components/shared/Surface";
 import LoadingSpinner from "@/components/shared/LoadingSpinner";
+import UserInfo from "@/components/shared/UserInfo";
+import Input from "@/components/shared/Input";
 import BoardColumn from "./BoardColumn";
 import BoardCard from "./BoardCard";
-import UserInfo from "@/components/shared/UserInfo";
 import filterCards from "@/utils/filterCards";
-import Input from "@/components/shared/Input";
 
 const BoardPage = () => {
   const currentUser = useAuthStore((state) => state.currentUser);

@@ -18,3 +18,8 @@ export const CARD_ERROR_MESSAGES = {
   TITLE_REQUIRED: "Title is required",
   DESCRIPTION_MIN_LENGTH: "Description must be at least 5 characters",
 } as const;
+
+export const API_ERROR_MESSAGES = {
+  INTERNAL_SERVER: "API error: 500",
+  NOT_FOUND: "API error: 404",
+} as const;
