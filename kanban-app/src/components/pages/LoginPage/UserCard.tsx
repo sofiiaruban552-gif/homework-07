@@ -20,6 +20,7 @@ const UserCard = ({ user, checked, onChange }: UserCardProps) => (
       className="user-card__input"
       type="radio"
       name="user"
+      value={user.id}
       checked={checked}
       onChange={() => onChange(user.id)}
     />

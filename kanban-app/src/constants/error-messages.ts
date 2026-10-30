@@ -12,6 +12,7 @@ export const ERROR_MESSAGES = {
 export const ERROR_DETAILS = {
   NETWORK: "Network error",
   DELETE: "Delete failed",
+  INTERNAL_SERVER: "Internal Server Error",
 } as const;
 
 export const CARD_ERROR_MESSAGES = {

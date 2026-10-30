@@ -50,3 +50,8 @@ export const columns: Column[] = [
   { id: 20, limit: 3 },
   { id: 30, limit: 5 },
 ] as Column[];
+
+export const mockUsers = [
+  { id: 1, name: "John Doe", color: "#ff0000" },
+  { id: 2, name: "Jane Smith", color: "#00ff00" },
+];
