@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { http, HttpResponse } from "msw";
 
 import { api, API } from "./client";
@@ -6,10 +6,6 @@ import { server } from "@/test/server";
 import { API_ERROR_MESSAGES } from "@/constants/error-messages";
 
 describe("API client", () => {
-  afterEach(() => {
-    server.resetHandlers();
-  });
-
   it("throws an error when the response is not OK (500)", async () => {
     server.use(
       http.get(`${API}/test-error`, () => {
