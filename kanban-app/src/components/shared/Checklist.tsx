@@ -84,6 +84,7 @@ const Checklist = ({ items, onAddItem, onToggleItem }: ChecklistProps) => {
             value={value}
             placeholder="Add item..."
             className="checklist__input"
+            aria-label="Add item"
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             error={error}
