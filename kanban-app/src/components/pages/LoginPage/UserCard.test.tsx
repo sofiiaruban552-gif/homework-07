@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import UserCard from './UserCard';
 import { mockUsers } from '@/test/fixtures';
 
-
 const mockUser = mockUsers[0];
 
 const onChange = vi.fn();
