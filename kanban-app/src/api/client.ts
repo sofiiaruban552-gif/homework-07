@@ -1,7 +1,7 @@
-export const API = import.meta.env.VITE_API_URL;
+export const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const request = async <T>(url: string, options?: RequestInit): Promise<T> => {
-  const response = await fetch(`${API}${url}`, options);
+  const response = await fetch(`${API_BASE_URL}${url}`, options);
 
   if (!response.ok) {
     throw new Error(`API error: ${response.status}`);

@@ -7,13 +7,14 @@ import { ToastContainer } from "react-toastify";
 
 import LoginPage from "./LoginPage";
 
-import { API } from "@/api/client";
+import { API_BASE_URL } from "@/api/client";
 import { ROUTES } from "@/constants/routes";
 import { ERROR_DETAILS, ERROR_MESSAGES } from "@/constants/error-messages";
 
 import useAuthStore from "@/store/useAuthStore";
 import useUsersStore from "@/store/useUsersStore";
-import { mockUsers, server } from "@/test/server";
+import { server } from "@/test/server";
+import { mockUsers } from "@/test/fixtures";
 
 const renderLoginPage = () =>
   render(
@@ -46,7 +47,7 @@ describe("LoginPage integration tests", () => {
       await screen.findByRole("heading", { name: "Who are you?" }),
     ).toBeInTheDocument();
 
-    await user.click(await screen.findByLabelText("John Doe"));
+    await user.click(await screen.findByText("John Doe"));
 
     expect(
       await screen.findByRole("heading", { name: "Board page" }),
@@ -57,7 +58,7 @@ describe("LoginPage integration tests", () => {
 
   it("displays an error toast when fetching users returns HTTP 500", async () => {
     server.use(
-      http.get(`${API}/users`, () =>
+      http.get(`${API_BASE_URL}/users`, () =>
         HttpResponse.json(
           { message: ERROR_DETAILS.INTERNAL_SERVER },
           { status: 500 },
@@ -67,9 +68,9 @@ describe("LoginPage integration tests", () => {
 
     renderLoginPage();
 
-    expect(
-      await screen.findByText(ERROR_MESSAGES.LOAD_USERS),
-    ).toBeInTheDocument();
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      ERROR_MESSAGES.LOAD_USERS,
+    );
 
     expect(useAuthStore.getState().currentUser).toBeNull();
 
