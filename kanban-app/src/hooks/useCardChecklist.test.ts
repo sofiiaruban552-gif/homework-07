@@ -3,6 +3,9 @@ import { act, renderHook } from "@testing-library/react";
 import { checklistItems } from "@/test/fixtures";
 import useCardChecklist from "./useCardChecklist";
 
+const NEW_ITEM = "New item";
+const NON_EXISTENT_ID = 999;
+
 const renderChecklist = (withInitialItems = false) =>
   renderHook(() =>
     useCardChecklist({
@@ -18,13 +21,13 @@ describe("useCardChecklist", () => {
       const { result } = renderChecklist();
 
       act(() => {
-        result.current.addItem("  New item  ");
+        result.current.addItem(` ${NEW_ITEM} `);
       });
 
       expect(result.current.items).toHaveLength(1);
       expect(result.current.items[0]).toEqual({
         id: expect.any(Number),
-        text: "New item",
+        text: NEW_ITEM,
         done: false,
       });
     });
@@ -65,7 +68,7 @@ describe("useCardChecklist", () => {
       const originalItems = result.current.items;
 
       act(() => {
-        result.current.toggleItem(999);
+        result.current.toggleItem(NON_EXISTENT_ID);
       });
 
       expect(result.current.items).toEqual(originalItems);
