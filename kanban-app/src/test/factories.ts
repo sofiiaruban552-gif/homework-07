@@ -1,4 +1,4 @@
-import type { Card, CardForm } from "@/types/index";
+import type { Card, CardForm, Column } from "@/types/index";
 
 export const makeCard = (overrides: Partial<Card> = {}): Card => ({
   id: 1,
@@ -18,3 +18,10 @@ export const makeCardForm = (overrides: Partial<CardForm> = {}): CardForm => ({
   assignee: "",
   ...overrides,
 });
+
+export const makeColumns = (): Column[] =>
+  [
+    { id: 10, limit: null },
+    { id: 20, limit: 3 },
+    { id: 30, limit: 5 },
+  ] as Column[];
