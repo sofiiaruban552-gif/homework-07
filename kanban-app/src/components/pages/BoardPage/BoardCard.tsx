@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Pencil, Trash2 } from "lucide-react";
+import { Copy, Pencil, Trash2 } from "lucide-react";
 
 import type { Card, User } from "@/types";
 
@@ -15,6 +15,7 @@ import useModal from "@/hooks/useModal";
 import useBoardStore from "@/store/useBoardStore";
 
 import { getChecklistProgress } from "@/utils/checklist";
+import { highlightCopySuffix } from "@/utils/duplicateCard";
 import Avatar from "@/components/shared/Avatar";
 
 interface BoardCardProps {
@@ -27,6 +28,7 @@ const BoardCard = ({ card, assignee, isOverlay = false }: BoardCardProps) => {
   const { isOpen, open, close } = useModal();
 
   const removeCard = useBoardStore((state) => state.removeCard);
+  const duplicateCard = useBoardStore((state) => state.duplicateCard);
 
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -52,6 +54,11 @@ const BoardCard = ({ card, assignee, isOverlay = false }: BoardCardProps) => {
   const handleDelete = (event: MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     setIsRemoving(true);
+  };
+
+  const handleDuplicate = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    void duplicateCard(card.id);
   };
 
   const handleButtonPointerDown = (event: PointerEvent<HTMLButtonElement>) => {
@@ -83,10 +90,23 @@ const BoardCard = ({ card, assignee, isOverlay = false }: BoardCardProps) => {
         })}
       >
         <div className="card__header" {...(!isOverlay ? listeners : {})}>
-          <h3 className="card__title">{card.title}</h3>
+          <h3
+            className="card__title"
+            dangerouslySetInnerHTML={{ __html: highlightCopySuffix(card.title) }}
+          />
 
           {!isOverlay && (
             <div className="card__actions">
+              <Button
+                type="button"
+                variant="secondary"
+                small
+                className="card__duplicate"
+                onClick={handleDuplicate}
+              >
+                <Copy size={14} />
+              </Button>
+
               <Button
                 type="button"
                 variant="secondary"

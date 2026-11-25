@@ -12,6 +12,7 @@ import {
 
 import type { Card, Column, NewCard } from "@/types";
 import { ERROR_MESSAGES } from "@/constants/error-messages";
+import { buildDuplicate } from "@/utils/duplicateCard";
 
 interface BoardStore {
   cards: Card[];
@@ -24,6 +25,7 @@ interface BoardStore {
   addCard: (data: NewCard) => Promise<void>;
   editCard: (id: number, patch: Partial<Card>) => Promise<void>;
   removeCard: (id: number) => Promise<void>;
+  duplicateCard: (id: number) => Promise<void>;
   moveCard: (id: number, toColumn: number, toIndex: number) => Promise<void>;
 
   toggleSubtask: (cardId: number, subtaskId: number) => Promise<void>;
@@ -124,6 +126,27 @@ const useBoardStore = create<BoardStore>((set, get) => ({
       });
 
       toast.error(ERROR_MESSAGES.DELETE_CARD);
+    }
+  },
+
+  duplicateCard: async (id) => {
+    const card = get().cards.find((card) => card.id === id);
+
+    if (!card) {
+      return;
+    }
+
+    try {
+      const newCard = await createCard(buildDuplicate(card));
+
+      set((state) => ({
+        cards: [...state.cards, newCard],
+      }));
+
+      toast.success("Card duplicated");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      console.log(error.message);
     }
   },
 

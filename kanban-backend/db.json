@@ -148,6 +148,36 @@
       "columnId": 1,
       "order": 3,
       "id": 7
+    },
+    {
+      "title": "test2 (copy)",
+      "description": "test jjjj",
+      "columnId": 1,
+      "order": 4,
+      "assigneeId": 1,
+      "checklist": [
+        {
+          "id": 1788622084478,
+          "text": "todo",
+          "done": false
+        }
+      ],
+      "id": 8
+    },
+    {
+      "title": "test2 (copy) (copy)",
+      "description": "test jjjj",
+      "columnId": 1,
+      "order": 4,
+      "assigneeId": 1,
+      "checklist": [
+        {
+          "id": 1788622084478,
+          "text": "todo",
+          "done": false
+        }
+      ],
+      "id": 9
     }
   ]
 }

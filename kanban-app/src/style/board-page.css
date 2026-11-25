@@ -211,6 +211,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.card__copy-label {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
 
 .card__content {
   display: flex;
